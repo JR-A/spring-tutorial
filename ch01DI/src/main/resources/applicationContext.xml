@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 수동설정 -->
+	
+	<!-- Bean 객체 생성을 위한 설정(IoC컨테이너에 생성된 객체 보관) -->
+	<!-- 
+		name : Bean 객체를 구분할 때 사용할 이름(Bean객체에 접근하기 위한 식별자) -id로 써도 무방
+		class : Bean 객체를 생성할 때 사용할 클래스 
+	 -->
+	 <bean name="messageBean" class="kr.spring.ch01.MessageBean"/>
+	 <bean name="studentBean" class="kr.spring.ch02.StudentBean"/>
+	 <bean name="peopleBean" class="kr.spring.ch03.PeopleBean"/>
+	  
+	 <!-- 의존 관계 주입(DI) : 생성자 방식 -->
+	 <bean name="writeArticleService" class="kr.spring.ch04.WriteArticleService">
+	 	<!-- 생성자에 argument 전달 -->
+	 	<constructor-arg>
+	 		<!-- ref : 주입할 의존 객체에 해당하는 빈 객체의 식별값. 이 bean이 ref태그한 bean을 참조, 의존함. 생성자의 argument로 참조 객체 전달 -->
+	 		<ref bean="writeArticleDAO"/>
+	 	</constructor-arg>
+	 </bean>	 
+	 <bean name="writeArticleDAO" class="kr.spring.ch04.WriteArticleDAO"/>
+	  
+	 <!-- 의존 관계 주입(DI) : 생성자 방식 2 - 여러 개의 인자 사용 -->
+	 <!-- public SystemMonitor(long periodTime, SmsSender sender) -->
+	 <!-- 숫자나 문자는 value, 참조형은 ref 사용 -->
+	 <bean id="monitor" class="kr.spring.ch05.SystemMonitor">
+	 	<!-- 방법 1 -->
+	 	<!-- (주의)파라미터의 순서대로 기재 -->
+<!-- 	<constructor-arg>
+	 		<value>10</value>
+	 	</constructor-arg>
+	 	<constructor-arg>
+	 		<ref bean="smsSender"/>
+	 	</constructor-arg> -->
+	 	
+	 	<!-- 방법 2 -->
+	 	<!-- 속성으로 값 또는 객체 설정 -->
+<!-- 	<constructor-arg value="20"/>
+	 	<constructor-arg ref="smsSender"/> -->
+	 	
+	 	<!-- 방법 3 -->
+	 	<!-- 순서를 무시할 때 1: index 표시 -->
+<!-- 	<constructor-arg index="1" ref="smsSender"/>
+	 	<constructor-arg index="0" value="30"/> -->
+	 	
+	 	<!-- 방법 4 -->
+	 	<!-- 순서를 무시할 때 2 : 생성자의 인자명 기재(권장) -->
+	 	<constructor-arg name="periodTime" value="40"/>
+	 	<constructor-arg name="sender" ref="smsSender"/>
+	 </bean>	 
+	 <bean id="smsSender" class="kr.spring.ch05.SmsSender"/>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 (ref, value값을 해당 클래스에 선언한 setter의 인자에 주입하여 프로퍼티에 전달)-->
+	 <bean name="registerService" class="kr.spring.ch06.RegisterService">
+		<!-- name : 의존 객체를 주입할 때 사용할 설정 메서드의 프로퍼티 이름 -->
+		<property name="registerDAO">	<!-- 빈객체의 프로퍼티 변수명과 일치 -->
+			<!-- ref : 주입할 의존 객체에 해당하는 Bean 객체의 식별값. 프로퍼티로 참조할 빈 -->
+			<ref bean="registerDAO"/>	<!-- 프로퍼티가 하단에 정의한 bean 참조 -->
+		</property>
+	 </bean>	 
+	 <bean name="registerDAO" class="kr.spring.ch06.RegisterDAO"/>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 2 - 프로퍼티가 여러 개인 경우 -->
+	 <bean name="monitor2" class="kr.spring.ch07.SystemMonitor">
+	 	<!-- (주의)파라미터의 순서대로 기재 -->
+	 	<property name="periodTime">
+	 		<value>10</value>
+	 	</property>
+	 	<property name="smsSender">	 <!-- 빈객체의 프로퍼티 변수명과 일치 -->
+	 		<ref bean="smsSender2"/> <!-- ref : 주입할 의존 객체에 해당하는 Bean 객체의 식별값 -->
+	 	</property>
+	 </bean>	  
+	 <bean name="smsSender2" class="kr.spring.ch07.SmsSender"/>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 3 - XML 네임스페이스를 이용한 프로퍼티 설정 -->
+	 <!-- p : property태그 쓰는 대신 p접두사로(property약자) bean태그의 속성으로 프로퍼티 명시. 객체는 -ref -->
+	 <bean name="work" class="kr.spring.ch08.WorkControl" p:periodTime="100" p:emailSender-ref="email"/>
+	 <bean name="email" class="kr.spring.ch08.EmailSender"/>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 4-(1) 콜렉션 타입(List) 프로퍼티 설정 -->
+	 <bean name="performanceMonitor" class="kr.spring.ch09.PerformanceMonitor">
+	 	<!-- set 메서드 찾아서 객체 전달 -->
+	 	<property name="deviations">	<!-- 빈객체의 프로퍼티 변수명과 일치 -->
+	 		<!-- List<Double> -->
+	 		<list>
+	 			<value>0.2</value>
+	 			<value>0.3</value>
+	 		</list>
+	 	</property>
+	 </bean>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 4-(2) 콜렉션 타입(Map) 프로퍼티 설정 -->
+	 <bean name="protocolHandlerFactory" class="kr.spring.ch10.ProtocolHandlerFactory">
+	 	<!-- set 메서드 찾아서 객체 전달 -->
+	 	<property name="map">			<!-- 빈 객체의 프로퍼티 변수명과 일치 -->
+	 		<!-- Map<String, Object> -->		
+	 		<!-- 하나의 key-value 쌍을 entry태그로 묶기 -->
+	 		<map>
+	 			<entry>
+	 				<key><value>soap</value></key>	<!-- key : key태그로 감싸기.문자열이므로 value태그필요 -->
+	 				<ref bean="soapHandler"/>		<!-- value : 참조형(Object)이므로 ref태그 -->
+	 			</entry>
+	 			<entry>
+	 				<key><value>rest</value></key>
+	 				<ref bean="restHandler"/>
+	 			</entry>
+	 		</map>
+	 	</property>
+	 </bean>
+	 <bean name="soapHandler" class="kr.spring.ch10.SoapHandler"/>
+	 <bean name="restHandler" class="kr.spring.ch10.RestHandler"/>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 4-(3) 콜렉션 타입(Set) 프로퍼티 설정 -->
+	 <bean name="videoClient" class="kr.spring.ch11.VideoClient">
+	 	<!-- set 메서드 찾아서 객체 전달 -->
+	 	<property name="subSet">		<!-- 빈 객체의 프로퍼티 변수명과 일치 -->
+	 		<!-- Set<Integer> -->
+	 		<set>
+	 			<value>10</value>
+	 			<value>20</value>
+	 		</set>
+	 	</property>
+	 </bean>
+	 
+	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 4-(4) 콜렉션 타입(Properties) 프로퍼티 설정 -->
+	 <bean name="bookClient" class="kr.spring.ch12.BookClient">
+	 	<!-- set 메서드 찾아서 객체 전달 -->
+	 	<property name="prop">			<!-- 빈 객체의 프로퍼티 변수명과 일치 -->
+	 		<!-- Properties -->			<!-- key,value 모두 무조건 String이므로 제네릭 사용하지않음 -->
+	 		<props>
+	 			<prop key="server">192.168.0.1</prop>
+	 			<prop key="connectionTimeout">5000</prop>
+	 		</props>
+	 	</property>
+	 </bean>
+	 
+</beans>
