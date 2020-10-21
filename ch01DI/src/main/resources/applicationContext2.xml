@@ -24,5 +24,21 @@
 <!-- 	<bean name="phoneCall2" class="kr.spring.ch14.PhoneCall"/> -->
 	
 	
+	<!-- 빈 객체 범위 설정 : 서로 다른 범위 빈에 대한 의존 처리 -->
+	<!-- scope 설정 하지않으면 기본적으로 singleton -->
+	<!-- singleton : 스프링 컨테이너에 한 개의 빈 객체만 존재. 호출 여러 번 해도 동일한 빈 객체 호출됨 -->
+	<bean id="executor" class="kr.spring.ch15.Executor">
+		<property name="worker" ref="workerBean"/>
+	</bean>
+	<!-- prototype : 빈을 호출할 때마다 객체 생성. aop옵션 추가해야 버그 없이 적용됨 -->
+	<bean id="workerBean" class="kr.spring.ch15.Worker" scope="prototype">
+		<!-- 위 Executor클래스는 전달받은 Worker객체가 prototype범위의 빈 객체임에도 불구하고
+		매번 새로운 Worker객체를 사용하는 것이 아니라 한 개의 Worker객체만 사용하게 됨
+		따라서 prototype범위의  빈 객체가 singleton범위의 빈 객체로부터 참조될 때
+		<aop:scoped-proxy/>태그를 이용하면 올바르게 범위를 적용 -->
+		<aop:scoped-proxy/>
+	</bean>
+	
+	
 	
 </beans>
