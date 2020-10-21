@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 자동설정 -->
+	
+	<!-- byName : 프로퍼티 이름을 이용한 의존 관계 자동 설정. (권장)
+		 		  bean의 이름과 프로퍼티명이 같으면 자동으로 의존관계 설정 -->
+	<bean name="writeArticleService" class="kr.spring.ch13.WriteArticleService" autowire="byName"/>
+	<bean name="writeArticleDAO" class="kr.spring.ch13.WriteArticleDAO"/>
+	
+	<!-- byType : 프로퍼티의 타입을 이용한 의존 관계 자동 설정.
+				  bean의 타입과 프로퍼티 타입이 같으면 자동으로 의존관계 설정 -->	
+	<bean name="systemMonitor" class="kr.spring.ch14.SystemMonitor" autowire="byType"/>
+	<bean name="phoneCall" class="kr.spring.ch14.PhoneCall"/>
+	<!-- 동일한 타입의 객체가 존재할 경우 오류 발생. 컨테이너에 어떤 객체를 넣어야할 지 모호
+		 expected single matching bean but found 2 -->
+<!-- 	<bean name="phoneCall2" class="kr.spring.ch14.PhoneCall"/> -->
+	
+	
+	
+</beans>
