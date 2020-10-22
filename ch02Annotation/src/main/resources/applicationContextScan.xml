@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 자동 검색된 빈 지정 : 지정한 패키지(이하)에서 @Component어노테이션(혹은 하위 어노테이션) 적용된 클래스 검색하여 빈으로 등록 -->
+	<!-- 
+		  어노테이션 사용하기 위해 <context:annotation-config/>태그를 명시했으나 
+		  디렉토리 스캔해서 빈 객체를 컨테이너에 추가할 때 위 태그 명시 생략
+ 	-->
+	<context:component-scan base-package="kr.spring.ch05"/>
+	
+</beans>

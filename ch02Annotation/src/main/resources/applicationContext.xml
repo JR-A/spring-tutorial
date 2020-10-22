@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- @Required, @Autowired, @Resource 사용할 경우 <context:annotation-config/> 태그 추가 -->
+	<context:annotation-config/>
+	
+	<!-- @Required 어노테이션을 이용한 필수 프로퍼티 설정 -->
+	<bean id="camera1" class="kr.spring.ch01.Camera">
+		<property name="number" value="1"/>
+	</bean>
+	
+	<!-- @Autowired 어노테이션을 이용한 자동 설정(bean객체의 '타입'과 프로퍼티 타입이 일치하면 의존 객체 주입) -->
+	<bean id="monitor" class="kr.spring.ch02.SystemMonitor"/>
+	<bean id="sender" class="kr.spring.ch02.SmsSender"/>
+	
+	<!-- @Qualifier 어노테이션 이용한 자동 설정 제한 -> <qualifier> 태그 추가. 부가식별자 사용하여 이 빈을 주입하겠다고 알려줌 -->
+	<bean id="monitor2" class="kr.spring.ch03.SystemMonitor2"/>
+	<bean id="recorder1" class="kr.spring.ch03.Recorder">
+		<qualifier value="main"/>
+	</bean>
+	<!-- @Autowired 어노테이션 사용시 타입이 같은 빈객체가 여러 개 존재하면 오류 발생! 어떤 빈을 주입할지 모호 -->
+	<bean id="recorder2" class="kr.spring.ch03.Recorder"/>
+	<!-- @Autorwired 어노테이션은 특정타입의 빈객체가 하나만 만들어진다고 확신할 수 있을 때만 사용! -->
+	
+	<!-- @Resource 어노테이션을 이용한 프로퍼티 설정(bean객체의 '이름'과 프로퍼티명이 일치하면 의존 관계 주입)  -->
+	<bean id="homeController" class="kr.spring.ch04.HomeController"/>
+	<bean id="camera2" class="kr.spring.ch04.Camera" p:number="2"/>
+	<bean id="cameraZ" class="kr.spring.ch04.Camera" p:number="3"/>
+	<bean id="camera4" class="kr.spring.ch04.Camera" p:number="4"/>
+</beans>
