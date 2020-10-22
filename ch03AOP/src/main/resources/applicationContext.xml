@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+<!-- 
+	Advice : 언제 공통 기능을 핵심 로직에 적용할 것인지를 정의. Target클래스의 Pointcut에 삽입되어져 동작(적용할 기능)할 수 있는 코드. 실질적인 부가기능을 담은 구현체
+	Joinpoint : Advice를 적용 가능한 지점. 프로그램 실행 중 발생하는 메서드 호출, 생성자호출, 필드값 변경과 같은 특수한 지점.
+	Pointcut : Joinpoint의 부분집합으로서 실제로 Advice가 적용되는 Joinpoint
+	Weaving : Advice를 핵심 로직 코드에 적용하는 것
+	Aspect : AOP의 기본 모듈. 여러 객체에 공통으로 적용되는 공통 관심 사항
+	
+	AspectJ의 Pointcut 표현식
+	1. execution(public void set*(..))
+	-리턴 타입이 void이고 메서드 이름이 set으로 시작하고, 파라미터가 0개 이상인 메서드 호출
+	2. execution(* kr.spring.ch01.*.*())
+	-kr.spring.ch01 패키지의 파라미터가 없는 모든 메서드 호출
+	3. execution(* kr.spring.ch01..*.*(..))
+	-kr.spring.ch02 패키지 및 하위 패키지에 있는 파라미터가 0개 이상인 메서드 호출
+	4. execution(Integer kr.spring.ch01..WriteArticleService.wrtie(..))
+	-리턴 타입이 Integer인 WriteArticleService 인터페이스의 write()메서드 호출
+ -->
+
+	<!-- 공통기능 메서드를 가진 클래스 -->
+	<bean id="myFirstAdvice" class="kr.spring.ch01.pojo.MyFirstAdvice"/>
+	
+	<!-- AOP 설정 -->
+	<aop:config>
+		<!-- Aspect 설정 : Advice를 어떤 Pointcut에 적용할지 설정. Advice와 Pointcut 결합 -->
+		<aop:aspect id="aspect" ref="myFirstAdvice">
+			<!-- Pointcut 설정 : 실제로 Advice가 적용되는 Joinpoint -->
+			<aop:pointcut expression="execution(public String launch())" id="publicMethod"/>
+			
+			<!-- Advice 설정 : 핵심기능 메서드 호출 전 공통기능 메서드 수행 -->
+			<!-- <aop:before method="before" pointcut-ref="publicMethod"/> -->
+			
+			<!-- Advice 설정 : 핵심기능 (예외 발생 없이)수행된 이후에 공통기능 메서드 수행. returning속성 통해 핵심기능의 return value를 Advice에 전달(Advice메서드의 파라미터 이름 명시) -->
+			<!-- <aop:after-returning method="afterReturning" pointcut-ref="publicMethod" returning="msg"/> -->
+			
+			<!-- Advice 설정 : 핵심기능 메서드가 실행 도중 예외를 반환하고 종료할 때 공통기능 메서드 수행 . throwing속성 통해 핵심기능이 던진 예외를 Advice에 전달(Advice메서드의 파라미터 이름 명시) -->
+			<!-- <aop:after-throwing method="afterThrowing" pointcut-ref="publicMethod" throwing="ex"/>  -->
+			
+			<!-- Advice 설정 : 핵심기능 메서드 실행 후에(실행 도중 예외 발생 여부에 관계없이) 공통기능 메서드 수행 -->
+			<!-- <aop:after method="after" pointcut-ref="publicMethod"/> -->
+			
+			<!-- Advice 설정 : 핵심기능 메서드 실행 전,후 또는 예외발생시 공통기능 메서드 수행 -->
+			<aop:around method="around" pointcut-ref="publicMethod"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 핵심기능 메서드를 가진 클래스 -->
+	<bean id="product" class="kr.spring.product.Product"/>
+	
+</beans>
