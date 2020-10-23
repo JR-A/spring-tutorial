@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />	<!-- 경로 -->
+		<beans:property name="suffix" value=".jsp" />	<!-- 호출할 화면의 확장자 -->
+	</beans:bean>
+	<!-- 전체 경로 만들고 DispatcherServlet에 전달하여 View 호출할 수 있도록 도움 -->
+	<!-- Controller에서 View의 파일명 가져와서 접두사(경로), 접미사(확장자)합치는 작업 -->
+	
+
+	<!-- @Required, @Autowired, @Resource 사용할 경우 <context:annotation-config/> 태그 추가 -->
+	<context:annotation-config/>
+	
+	<!-- 기본 설정 -->
+	<beans:bean id="helloController" class="kr.spring.ch01.controller.HelloController"/>
+	
+	<!-- 파라미터로 전송된 데이터 처리 -->
+	<beans:bean id="searchController" class="kr.spring.ch02.controller.SearchController"/>
+	
+	<!-- 데이터를 전송해서 자바빈에 담기 -->
+	<beans:bean id="newArticleController" class="kr.spring.ch03.controller.NewArticleController"/>
+	<!-- @Resource 어노테이션을 이용해서 프로퍼티 방식으로 의존성 주입. 클래스 프로퍼티와 id가 일치해야함 -->
+	<beans:bean id="articleService" class="kr.spring.ch03.service.ArticleService"/>
+	
+	<!-- @CookieValue 어노테이션을 이용한 쿠키 매핑. Controller의 경우 id생략가능. 우리가 호출하지 않음(클라이언트 요청에 의해 서블릿에서 호출) -->
+	<beans:bean class="kr.spring.ch04.controller.CookieController"/>
+	
+	<!-- 데이터를 전송하고 자바빈에 전송된 데이터 저장 및 처리 -->
+	<beans:bean class="kr.spring.ch05.controller.GameSearchController"/>
+	<!-- DI해주어야 하기 때문에 id 생략불가 -->
+	<beans:bean id="searchService" class="kr.spring.ch05.service.SearchService"/>
+	
+</beans:beans>
