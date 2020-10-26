@@ -46,4 +46,21 @@
 	<!-- DI해주어야 하기 때문에 id 생략불가 -->
 	<beans:bean id="searchService" class="kr.spring.ch05.service.SearchService"/>
 	
+	<!-- 유효성 체크 -->
+	<!-- ============== 리소스 번들 지정, 등록 =============== -->
+	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basenames">
+			<beans:list><!-- 폴더.파일명(확장자는 무조건 properties이므로 생략) -->
+				<beans:value>messages.validation</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- 폼에서 전송된 데이터 (서버에서) 유효성 체크 -->
+	<beans:bean class="kr.spring.ch06.controller.CreateAccountController"/>
+	
+	<!-- 로그인 처리 -->
+	<beans:bean class="kr.spring.ch07.controller.LoginController"/>
+	<beans:bean class="kr.spring.ch07.service.LoginService"/>
+	
 </beans:beans>
