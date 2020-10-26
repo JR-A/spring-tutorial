@@ -47,7 +47,7 @@ public class NewArticleController {
 	 *	
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public String submit(NewArticleCommand command) {
+	public String submit(NewArticleCommand command) {	//@ModelAttribute생략한 경우
 		
 		//우리가 자바빈 new로 생성해서 set함수 쓰는 것이 아니라 @ModelAttribute 어노테이션 이용해서 자동으로 자바빈 만든다
 		//파라미터 name과 자바빈의 필드 이름이 같으면 자동으로 binding

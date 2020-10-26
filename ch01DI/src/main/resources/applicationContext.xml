@@ -66,7 +66,7 @@
 			<!-- ref : 주입할 의존 객체에 해당하는 Bean 객체의 식별값. 프로퍼티로 참조할 빈 -->
 			<ref bean="registerDAO"/>	<!-- 프로퍼티가 하단에 정의한 bean 참조 -->
 		</property>
-	 </bean>	 
+	 </bean>
 	 <bean name="registerDAO" class="kr.spring.ch06.RegisterDAO"/>
 	 
 	 <!-- 의존 관계 주입(DI) : 프로퍼티 방식 2 - 프로퍼티가 여러 개인 경우 -->

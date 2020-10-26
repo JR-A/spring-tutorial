@@ -1,5 +1,6 @@
 package kr.spring.ch05.model;
 
+//VO
 public class SearchCommand {
 	//get방식으로 전송시 전송되는 name과같도록
 	private String type;
