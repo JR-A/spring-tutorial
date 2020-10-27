@@ -76,5 +76,8 @@
 	<!-- 파일 업로드 -->
 	<beans:bean class="kr.spring.ch08.controller.SubmitReportController"/>
 	
+	<!-- 어노테이션을 이용한 유효성 체크 -->
+	<beans:bean class="kr.spring.ch09.controller.MemberWriteController"/>
+	
 	
 </beans:beans>
