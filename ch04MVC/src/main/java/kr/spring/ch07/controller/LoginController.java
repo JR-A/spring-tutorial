@@ -22,6 +22,8 @@ public class LoginController {
 	@Resource	//빈 등록시 프로퍼티명과 빈name일치하면 의존성 주입
 	private LoginService loginService;
 	
+	//자동으로 Setter 생성함
+	
 	//자바빈(VO) 초기화후 request에 등록
 	//@ModelAttribute("속성명") 속성명 생략하면 클래스명의 첫글자 소문자로 변환하여 속성명으로 사용(loginCommand)
 	@ModelAttribute
