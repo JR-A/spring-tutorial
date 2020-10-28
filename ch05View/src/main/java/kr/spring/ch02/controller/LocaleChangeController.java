@@ -22,7 +22,7 @@ public class LocaleChangeController {
 	public String change(@RequestParam("lang") String language, HttpServletRequest request, 
 																HttpServletResponse response) {
 		
-		Locale locale = new Locale(language);	//지정한 언어로 Locale 객체 생성
+		Locale locale = new Locale(language);	//지정한 언어로 Locale 객체 생성 Construct a locale from a language code.
 		
 		//세션에 locale정보 저장. 세션 만료되면 원래 locale로 초기화
 		localeResolver.setLocale(request, response, locale); //LocaleResolver객체 이용해 Locale 설정
