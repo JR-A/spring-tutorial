@@ -30,11 +30,10 @@
 	<!-- @Required, @Autowired, @Resource 사용할 경우 <context:annotation-config/> 태그 추가 -->
 	<context:annotation-config/>
 	
-	<!-- 유효성 체크 -->
-	<!-- ============== 리소스 번들 지정, 등록(메시지 처리) ================ -->
+	<!-- ============== 리소스 번들 지정, 등록(메시지 처리-로그인 유효성체크,국제화) ================ -->
 	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<beans:property name="basenames">
-			<!-- 한글버전만 등록. locale이 영어이면 _en -->
+			<!-- 주파일(한글버전)만 등록. locale language code가 영어권이면 _en -->
 			<beans:list><!-- 폴더.파일명(확장자는 무조건 properties이므로 생략) -->
 				<beans:value>messages.validation</beans:value>	<!-- 오류메시지 -->
 				<beans:value>messages.label</beans:value>	<!-- 화면상 label -->
@@ -68,5 +67,8 @@
 	<!-- 새로운 Resolver -->
 	<!-- BeanNameViewResolver : bean의 이름과 view의 이름이 일치하면 해당 bean 객체를 view처럼 사용 -->
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
+	
+	<!-- ============== JSON 문자열 생성 ============== -->
+	<beans:bean class="kr.spring.ch04.controller.PageReportController"/>
 	
 </beans:beans>
