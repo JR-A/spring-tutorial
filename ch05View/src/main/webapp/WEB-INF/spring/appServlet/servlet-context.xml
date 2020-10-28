@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
@@ -14,11 +15,13 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-
+	
+	<!-- 기존 Resolver -> 우선순위 1번으로 변경 -->
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" /> <!-- 경로 -->
 		<beans:property name="suffix" value=".jsp" /> <!-- 호출할 화면의 확장자 -->
+		<beans:property name="order" value="1"/> <!-- 우선순위 1번으로 변경 -->
 	</beans:bean>
 	<!-- 전체 경로 만들고 DispatcherServlet에 전달하여 View 호출할 수 있도록 도움 -->
 	<!-- Controller에서 View의 파일명 가져와서 접두사(경로), 접미사(확장자)합치는 작업 -->
@@ -51,5 +54,19 @@
 	<!-- locale 변경 -->
 	<beans:bean class="kr.spring.ch02.controller.LocaleChangeController"/>
 	
+	<!-- ============== 파일 다운로드 ============== -->
+	<beans:bean class="kr.spring.ch03.controller.DownloadController"/>
+	<beans:bean id="download" class="kr.spring.ch03.view.DownloadView"/>
+	
+	<!-- 
+		kr.spring.ch03.controller/DownloadController.java 참고
+		viewName을 "download"라고 하면 기존 viewResolver에 의해 접미사,접두사 붙어서 /WEB-INF/views/download.jsp 호출됨 
+		-> viewResolver를 하나 더 만들어서 "DownloadView.java" 호출하도록 함
+		viewResolver가 2개 있으면 충돌 발생 -> 우선순위 지정해야한다 - p:order="0"(Namespaces 항목 클릭하여 p namespace 추가)
+		그리고 기존 Resolver 우선순위는 1번으로 변경
+	 -->
+	<!-- 새로운 Resolver -->
+	<!-- BeanNameViewResolver : bean의 이름과 view의 이름이 일치하면 해당 bean 객체를 view처럼 사용 -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
 	
 </beans:beans>

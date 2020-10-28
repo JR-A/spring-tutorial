@@ -11,6 +11,8 @@
 <a href="${pageContext.request.contextPath}/login/login.do">LoginController</a><br>
 <a href="${pageContext.request.contextPath}/changeLanguage.do?lang=ko">LocaleChangeController - /changeLanguage.do?lang=ko</a><br>
 <a href="${pageContext.request.contextPath}/changeLanguage.do?lang=en">LocaleChangeController - /changeLanguage.do?lang=en</a><br>
+<%-- 클릭하면 파일 download (view보여주는것이 아님 - 새로운 resolver만들었다) --%>
+<a href="${pageContext.request.contextPath}/file.do">DownloadController</a><br>
 
 </body>
 </html>
