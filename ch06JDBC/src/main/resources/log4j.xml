@@ -11,8 +11,8 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="kr.spring.board">
-		<level value="info" />
+	<logger name="kr.spring">		<!-- <logger name="kr.spring.board"> 에서 board지워서 kr.spring폴더 하위에 모두 적용 -->
+		<level value="debug" />		<!-- info레벨에서 debug레벨로 변경 (BoardController.java에서 로그처리 참고) -->
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

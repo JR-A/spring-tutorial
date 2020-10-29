@@ -18,8 +18,8 @@ import kr.spring.board.vo.BoardCommand;
  *		1) Querying for an Integer
  *		2) Querying for an String
  *		3) Querying and returning an object(하나의 객체)
- *			Integer, String은 컴파일러가 해당 타입에 맞게 매핑해주지만, 우리가 만든 객체는 직접 Mapping Logic을 구현해야함 
- *			(RowMapper<T> 인터페이스 implements하는 구현객체 필요)
+ *			Integer, String은 컴파일러가 해당 타입에 맞게 매핑해주지만, 우리가 만든 객체는 직접 Mapping Logic을 구현해야함
+ *			(RowMapper<T> 인터페이스 implements하는 구현객체 필요. T는 우리가 만든 객체타입)
  *  2. query
  *  	:Querying and returning multiple objects(여러 개 객체)
  *  3. update
@@ -48,11 +48,13 @@ public class BoardDAOImpl implements BoardDAO{
 	 *	ROWNUM은 행번호. subquery의 질의결과(등록일 기준 내림차순정렬된 전체 게시글)를 테이블처럼 인식하므로 a라고 테이블 알리아스 지정. a.*로 테이블의 모든 컬럼 출력
 	 *	ROWNUM에 rnum 알리아스 지정하고 WHERE절에서 rnum 조건 걸어 페이징 처리 (rnum의 범위를 지정하여 해당 행번호인 레코드 반환)
 	 */
+	private static final String SELECT_DETAIL_SQL = 
+			"SELECT * FROM zboard WHERE num = ?";
 	
 	@Resource
 	private JdbcTemplate jdbcTemplate;	//컨테이너에 정의되어있으므로 주입받음(root-context.xml참고)
 
-	//한 개의 레코드 정보를 처리하는 익명구현객체 - 재활용성 높임(글 목록, 상세페이지에 활용)
+	//한 개의 레코드 정보를 처리하는 익명구현객체 - 재활용성 높임(글 목록, 상세페이지에 활용). 쿼리 결과로 우리가 정의한 객체를 반환받는경우 RowMapper 필요
 												//RowMapper<BoardCommand>인터페이스를 implements하는 익명구현객체
 	private RowMapper<BoardCommand> rowMapper = new RowMapper<BoardCommand>(){
 		@Override
@@ -91,11 +93,13 @@ public class BoardDAOImpl implements BoardDAO{
 		
 		return list;
 	}
-
+	
+	//글 번호로 게시글 반환
 	@Override
 	public BoardCommand getBoard(int num) {
-		// TODO Auto-generated method stub
-		return null;
+		BoardCommand board = (BoardCommand)jdbcTemplate.queryForObject(SELECT_DETAIL_SQL, new Object[] {num}, rowMapper);
+		
+		return board;
 	}
 
 	@Override

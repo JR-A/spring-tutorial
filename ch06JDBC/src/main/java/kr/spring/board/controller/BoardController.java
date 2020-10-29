@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,8 +43,19 @@ public class BoardController {
 	//프로퍼티
 	@Resource
 	private BoardService boardService;  //컨테이너에 정의되어있으므로 주입받음(root-context.xml에서 빈 자동스캔)
-	
 	//자동으로 Setter 생성함
+	
+	//로그처리(로그 대상 지정) - src/main/resources 의 log4j.xml 변경
+	private Logger log = Logger.getLogger(this.getClass());		//this:BoardController객체, this.getClass():BoardController클래스 
+	/*
+	 * 로그 레벨
+	 * FATAL : 가장 심각한 오류
+	 * ERROR : 일반적인 오류
+	 * WARN  : 주의를 요하는 경우 (오류는 아님)
+	 * INFO  : 런타임시 관심있는 내용 표시. 로그인, 상태 변경과 같은 정보성 메시지
+	 * DEBUG : 시스템 흐름과 관련된 상세 정보. 개발시 디버깅 용도로 사용할 메시지 - 일반적으로 개발시 지정(FATAL~DEBUG까지 출력)
+	 * TRACE : 가장 상세한 정보 
+	 */
 	
 	//자바빈(VO) 초기화후 request에 등록  (CommandName은 jsp, controller에서 모두 일치시켜야함)
 	@ModelAttribute
@@ -78,6 +90,7 @@ public class BoardController {
 		return "redirect:/list.do";
 	}
 	
+	//게시글 목록
 	@RequestMapping("/list.do")
 	public ModelAndView process(@RequestParam(value="pageNum", defaultValue="1") int currentPage) {
 		
@@ -90,10 +103,8 @@ public class BoardController {
 		 * PagingUtil(int currentPage, int totalCount, int rowCount, int pageCount, String pageUrl)
 		 * currentPage : 현재페이지 
 		 * totalCount : 전체 게시물 수 
-		 * rowCount : 한 페이지의 게시물의 수 
 		 * pageCount : 한 화면에 보여줄 페이지 수 
 		 * pageUrl : 호출 페이지 url 
-		 * addKey : 부가적인 key 없을 때는 null 처리 (&num=23형식으로 전달할 것)
 		 */
 		
 		List<BoardCommand> list = null;
@@ -113,4 +124,22 @@ public class BoardController {
 		
 		return mav; //DispatcherServlet에 전달
 	}
+	
+	
+	//글 상세 정보
+	@RequestMapping("/detail.do")
+	public ModelAndView detail(@RequestParam int num) {
+		
+		//로그 처리
+		if(log.isDebugEnabled()) {	//로그 레벨이 DEBUG 포함이면. Check whether this category is enabled for the DEBUG Level. 
+			log.debug("<<num : >>" + num);
+		}
+		
+		//글 번호로 게시글 정보 가져오기
+		BoardCommand board = boardService.getBoard(num);
+		
+								//뷰이름, 뷰에 전달할 속성명, 속성값
+		return new ModelAndView("selectDetail", "board", board);
+	}
+	
 }
