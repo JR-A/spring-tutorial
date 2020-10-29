@@ -17,7 +17,7 @@
 			<li>
 				<label for="writer">작성자</label>
 				<form:input path="writer"/>
-				<form:errors path="writer" cassClass="error-color"/>
+				<form:errors path="writer" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="title">제목</label>
@@ -34,11 +34,11 @@
 				<form:textarea path="content"/>
 				<form:errors path="content" cssClass="error-color"/>
 			</li>
-			<div class="align-center">
-				<input type="submit" value="등록">
-				<input type="button" value="홈으로" onclick="location.href='list.do'">
-			</div>
 		</ul>
+		<div class="align-center">
+			<input type="submit" value="등록">
+			<input type="button" value="홈으로" onclick="location.href='list.do'">
+		</div>
 	</form:form>
 </div>
 </body>

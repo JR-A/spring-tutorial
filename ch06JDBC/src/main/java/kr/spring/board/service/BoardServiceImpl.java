@@ -13,7 +13,10 @@ import kr.spring.board.vo.BoardCommand;
 			//빈이름
 @Service("boardService")
 public class BoardServiceImpl implements BoardService {
-	
+	/*
+	 * DAO는 db에 접근해서 한 메서드에 하나의 sql문밖에 적용할 수 없으므로,
+	 * DAO의 메서드 여러개(여러번의 sql문 실행)를 묶어 하나의 작업단위로 만든다(트랜잭션 처리)
+	 */
 	@Resource
 	private BoardDAO boardDAO; //컨테이너에 정의되어있으므로 주입받음(root-context.xml에서 빈 자동스캔)
 	
@@ -25,14 +28,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int getBoardCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return boardDAO.getBoardCount();
 	}
 
 	@Override
 	public List<BoardCommand> getBoardList(int startRow, int endRow) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardDAO.getBoardList(startRow, endRow);
 	}
 
 	@Override

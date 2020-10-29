@@ -1,5 +1,7 @@
 package kr.spring.board.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -7,11 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.spring.board.service.BoardService;
 import kr.spring.board.validator.BoardValidator;
 import kr.spring.board.vo.BoardCommand;
+import kr.spring.util.PagingUtil;
 
 /*
  *  					@Component
@@ -36,8 +40,8 @@ import kr.spring.board.vo.BoardCommand;
 public class BoardController {
 	
 	//프로퍼티
-	@Resource	//빈 등록시 프로퍼티명과 빈 이름일치하면 의존성 주입 (root-context.xml에 @Service 빈 자동스캔)
-	private BoardService boardService;
+	@Resource
+	private BoardService boardService;  //컨테이너에 정의되어있으므로 주입받음(root-context.xml에서 빈 자동스캔)
 	
 	//자동으로 Setter 생성함
 	
@@ -75,7 +79,27 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/list.do")
-	public ModelAndView process() {
+	public ModelAndView process(@RequestParam(value="pageNum", defaultValue="1") int currentPage) {
+		
+		//총 게시글 수
+		int count = boardService.getBoardCount();
+		
+		//페이징처리
+		PagingUtil page = new PagingUtil(currentPage, count, 10, 10, "list.do");
+		/*
+		 * PagingUtil(int currentPage, int totalCount, int rowCount, int pageCount, String pageUrl)
+		 * currentPage : 현재페이지 
+		 * totalCount : 전체 게시물 수 
+		 * rowCount : 한 페이지의 게시물의 수 
+		 * pageCount : 한 화면에 보여줄 페이지 수 
+		 * pageUrl : 호출 페이지 url 
+		 * addKey : 부가적인 key 없을 때는 null 처리 (&num=23형식으로 전달할 것)
+		 */
+		
+		List<BoardCommand> list = null;
+		if(count > 0) {
+			list = boardService.getBoardList(page.getStartCount(), page.getEndCount());
+		}
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -83,6 +107,9 @@ public class BoardController {
 		mav.setViewName("selectList"); //경로, .jsp확장자는 제외하고 명시
 		
 		//뷰에서 사용할 데이터 세팅
+		mav.addObject("count", count);
+		mav.addObject("list", list);
+		mav.addObject("pagingHtml", page.getPagingHtml());
 		
 		return mav; //DispatcherServlet에 전달
 	}

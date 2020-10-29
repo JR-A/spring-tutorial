@@ -40,7 +40,7 @@
 		<property name="maxWait" value="5"/>
 	</bean>
 	
-	<!-- JdbcTemplate 객체 생성 -->
+	<!-- JdbcTemplate 객체 생성. db연동정보를 담으면서 update등의 spring프레임워크 메서드 사용하기 위해 -->
 	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource"></property> <!-- 위에 정의한 dataSource 빈을 참조 -->
 	</bean>
