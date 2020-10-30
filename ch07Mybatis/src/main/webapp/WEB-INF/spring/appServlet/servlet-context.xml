@@ -24,5 +24,13 @@
 	<!-- @Controller 오토스캔 -->
 	<context:component-scan base-package="kr.spring.board.controller" />
 	
+	<!-- ============== 리소스 번들 지정, 등록(메시지 처리-로그인 유효성체크) =============== -->
+	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basenames">
+			<beans:list><!-- 폴더.파일명(확장자는 무조건 properties이므로 생략) -->
+				<beans:value>messages.validation</beans:value>	<!-- 오류메시지 -->
+			</beans:list>
+		</beans:property>
+	</beans:bean>
 	
 </beans:beans>

@@ -28,7 +28,47 @@
  	</select>
  	<!-- xml에서는 비교연산자 <, > 쓰게되면 태그 시작, 끝으로 인식하기때문에 문법체크에서 배제하도록 설정해야함 (CDATA섹션으로 묶음) -->
 	<!-- 입력 파라미터는  #{프로퍼티}로 명시. map으로 데이터 받는 경우는 map의 key명시함 -->
+
+	<!-- 글 등록 -->
+	<insert id="insertBoard" parameterType="boardCommand">
+		INSERT INTO zboard (
+			num, 
+			writer, 
+			title, 
+			passwd, 
+			content, 
+			reg_date) 
+		VALUES (
+			zboard_seq.nextval, 
+			#{writer}, 
+			#{title}, 
+			#{passwd}, 
+			#{content}, 
+			SYSDATE)
+	</insert>
+	<!-- 자바빈의 프로퍼티명을 명시, 자바빈 이름은 생략 -->
+	
+	<!-- 글 상세 정보 -->
+	<select id="getBoard" resultType="boardCommand" parameterType="integer">
+		SELECT 
+		  *
+		FROM zboard
+		WHERE num = #{num}
+	</select>
+	<!-- num 변수를 파라미터로 받는다면, 클래스 내에 선언된 변수로 명시 -->
+	
+	<!-- 글 수정 -->
+	<update id="updateBoard" parameterType="boardCommand">
+		
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard" parameterType="integer">
+	
+	</delete>
+	
 </mapper>
+
 
 
 

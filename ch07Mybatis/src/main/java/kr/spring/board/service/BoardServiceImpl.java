@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public void insertBoard(BoardCommand board) {
-		//하나의 트랜잭션만 사용하므로 AutoCommit사용
+		boardDAO.insertBoard(board); //하나의 트랜잭션만 사용하므로 AutoCommit사용
 	}
 
 	@Override

@@ -176,6 +176,13 @@
 			<version>3.2.2</version>
 		</dependency>
 		
+		<!-- 어노테이션으로 유효성 체크하려면 Hibernate라이브러리 필요 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.18.FINAL</version>
+		</dependency>
+		
 		<!-- ========= 라이브러리 추가 ========= -->
 	
 		<!-- Test -->

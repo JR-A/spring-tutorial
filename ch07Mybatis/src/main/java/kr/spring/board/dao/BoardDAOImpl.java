@@ -20,8 +20,7 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public void insertBoard(BoardCommand board) {
-		// TODO Auto-generated method stub
-		
+		sqlSession.insert("insertBoard", board);
 	}
 
 	@Override
