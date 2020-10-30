@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="BoardDAO">  
+	<!-- 총 레코드(게시물) 수 -->
+	<!-- id : sql문을 식별하는 키.Unique해야함. resultType : 반환타입 -->
+	<select id="getBoardCount" resultType="java.lang.Integer">	<!-- 원래 java.lang.Integer로 명시해야하지만 알리아스 부여되어있음. Integer, integer로 명시해도 가능 -->
+		SELECT 
+			COUNT(*)
+		FROM zboard
+	</select>
+	
+ 	<!-- 글 목록 -->
+ 	<select id="getBoardList" parameterType="map" resultType="boardCommand">	<!-- List<BoardCommand>로 반환받지만, List로 명시하지않고 List에 담기는 자바빈타입으로 명시(SqlMapConfig에서 알리아스 지정했으므로 알리아스 boardCommand명시했음) -->
+ 		SELECT 
+ 		  *
+ 		FROM (SELECT 
+ 				a.*, 
+ 				rownum rnum
+ 			  FROM (SELECT
+ 			  		 * 
+ 			  		FROM zboard
+ 			  		ORDER BY num DESC) a)
+ 		<![CDATA[
+ 		WHERE rnum >= #{start} AND rnum <= #{end}
+ 		]]>
+ 	</select>
+ 	<!-- xml에서는 비교연산자 <, > 쓰게되면 태그 시작, 끝으로 인식하기때문에 문법체크에서 배제하도록 설정해야함 (CDATA섹션으로 묶음) -->
+	<!-- 입력 파라미터는  #{프로퍼티}로 명시. map으로 데이터 받는 경우는 map의 key명시함 -->
+</mapper>
+
+
+
+
+
+
+

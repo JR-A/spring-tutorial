@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- MyBatis 설정파일 -->
+
+<!-- 자바빈과 Mapper 등록 -->
+<configuration>
+	<typeAliases>
+	    <typeAlias alias="boardCommand" type="kr.spring.board.vo.BoardCommand"/> <!-- BoardMapper에서 사용할 별칭(알리아스) 지정. 원래대로면 패키지까지 모두 적어야함 -->
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="kr/spring/board/dao/BoardMapper.xml"/>
+	</mappers>
+</configuration>
