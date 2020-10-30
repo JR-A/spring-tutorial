@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,15 +64,15 @@ public class BoardController {
 		return new BoardCommand();
 	}
 	
-	//GET방식으로 전송시 form으로 진입
+	//글 쓰기 폼 - GET방식으로 전송시
 	@RequestMapping(value="/insert.do", method=RequestMethod.GET)
 	public String form() {
 		return "insertForm";
 	}
 	
-	//POST방식으로 전송시 글쓰기 전송된 데이터 처리, 유효성 처리
+	//글 쓰기 - POST방식으로 전송시 (전송된 데이터 처리, 유효성 체크)
 	@RequestMapping(value="/insert.do", method=RequestMethod.POST)
-	public String submit(BoardCommand boardCommand, BindingResult result) {
+	public String submit(BoardCommand boardCommand, BindingResult result) {	//ModelAttribute("boardCommand")가 생략됨
 		
 		//전송된 데이터 유효성 체크
 		new BoardValidator().validate(boardCommand, result);
@@ -91,7 +92,7 @@ public class BoardController {
 	}
 	
 	//게시글 목록
-	@RequestMapping("/list.do")
+	@RequestMapping("/list.do")			//selectList.jsp의 하단 pagingHtml에 링크 모두 걸려있음. 페이지번호 클릭시 pageNum을 get방식으로 넘겨줌
 	public ModelAndView process(@RequestParam(value="pageNum", defaultValue="1") int currentPage) {
 		
 		//총 게시글 수
@@ -103,8 +104,9 @@ public class BoardController {
 		 * PagingUtil(int currentPage, int totalCount, int rowCount, int pageCount, String pageUrl)
 		 * currentPage : 현재페이지 
 		 * totalCount : 전체 게시물 수 
+		 * rowCount : 한 페이지에 보여줄 게시물의 수
 		 * pageCount : 한 화면에 보여줄 페이지 수 
-		 * pageUrl : 호출 페이지 url 
+		 * pageUrl : 호출 페이지 url
 		 */
 		
 		List<BoardCommand> list = null;
@@ -132,7 +134,7 @@ public class BoardController {
 		
 		//로그 처리
 		if(log.isDebugEnabled()) {	//로그 레벨이 DEBUG 포함이면. Check whether this category is enabled for the DEBUG Level. 
-			log.debug("<<num : >>" + num);
+			log.debug("<<num>> : " + num);
 		}
 		
 		//글 번호로 게시글 정보 가져오기
@@ -142,4 +144,53 @@ public class BoardController {
 		return new ModelAndView("selectDetail", "board", board);
 	}
 	
+	//글 수정 폼 - GET방식으로 전송시
+	@RequestMapping(value="/update.do", method=RequestMethod.GET)
+	public String formUpdate(@RequestParam int num, Model model) {	//Model 객체는 데이터만 저장. 컨테이너가 제공
+		
+		//글 번호로 게시글 정보 가져오기
+		BoardCommand boardCommand = boardService.getBoard(num);
+		
+		//로그 처리
+		if(log.isDebugEnabled()) {
+			log.debug("<<BoardCommand>> : " + boardCommand);
+		}
+		
+		//모델에 데이터 세팅			 속성명			속성값
+		model.addAttribute("boardCommand",boardCommand);
+		
+		return "updateForm";
+	}
+	
+	
+	//글 수정 - POST방식으로 전송시
+	@RequestMapping(value="/update.do", method=RequestMethod.POST)
+	public String submitUpdate(BoardCommand boardCommand, BindingResult result) {
+		
+		//전송된 데이터 유효성 체크
+		new BoardValidator().validate(boardCommand, result);
+		
+		/*
+		 * BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		 */
+		if(result.hasErrors()) {
+			return "updateForm";
+		}
+		
+		//비밀번호 일치 여부 체크
+		//DB에 저장된 비밀번호 구하기
+		BoardCommand dbBoard = boardService.getBoard(boardCommand.getNum());
+		
+		//비밀번호 체크
+		if(!dbBoard.getPasswd().equals(boardCommand.getPasswd())) {	//일치하지 않으면 result에 에러 저장후 폼 호출
+								//필드		에러코드
+			result.rejectValue("passwd", "invalidPassword");
+			return "updateForm";
+		}
+		
+		//글 수정
+		boardService.updateBoard(boardCommand);
+		
+		return "redirect:/list.do";
+	}
 }

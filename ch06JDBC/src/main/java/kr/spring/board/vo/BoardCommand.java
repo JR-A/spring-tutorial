@@ -49,4 +49,10 @@ public class BoardCommand {
 		this.reg_date = reg_date;
 	}
 	
+	@Override
+	public String toString() {
+		return "BoardCommand [num=" + num + ", writer=" + writer + ", title=" + title + ", passwd=" + passwd
+				+ ", content=" + content + ", reg_date=" + reg_date + "]";
+	}
+
 }

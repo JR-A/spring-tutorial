@@ -50,6 +50,8 @@ public class BoardDAOImpl implements BoardDAO{
 	 */
 	private static final String SELECT_DETAIL_SQL = 
 			"SELECT * FROM zboard WHERE num = ?";
+	private static final String UPDATE_SQL = 
+			"UPDATE zboard SET writer=?, title=?, content=? WHERE num=?";
 	
 	@Resource
 	private JdbcTemplate jdbcTemplate;	//컨테이너에 정의되어있으므로 주입받음(root-context.xml참고)
@@ -104,8 +106,7 @@ public class BoardDAOImpl implements BoardDAO{
 
 	@Override
 	public void updateBoard(BoardCommand board) {
-		// TODO Auto-generated method stub
-		
+		jdbcTemplate.update(UPDATE_SQL, new Object[] {board.getWriter(), board.getTitle(), board.getContent(), board.getNum()});
 	}
 
 	@Override
