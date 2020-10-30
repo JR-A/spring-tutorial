@@ -193,4 +193,55 @@ public class BoardController {
 		
 		return "redirect:/list.do";
 	}
+	
+	//글 삭제 폼 - GET방식으로 전송시
+	@RequestMapping(value="/delete.do", method=RequestMethod.GET)
+	public String formDelete(@RequestParam int num, Model model) {	//Model 객체는 데이터만 저장. 컨테이너가 제공
+		
+		//유효성 체크 위해 자바빈으로 만듦
+		BoardCommand boardCommand = new BoardCommand();
+		boardCommand.setNum(num);
+		
+		//모델에 데이터 세팅
+		//Model에 저장된 데이터는 request에도 저장됨
+		model.addAttribute("boardCommand", boardCommand);
+		
+		return "deleteForm";
+	}
+	
+	//글 삭제 - POST방식으로 전송시
+	@RequestMapping(value="/delete.do", method=RequestMethod.POST)
+	public String submitDelete(BoardCommand boardCommand, BindingResult result) {
+		
+		//전송된 데이터 유효성 체크
+		new BoardValidator().validate(boardCommand, result);
+		/*	validator는 writer, title, passwd, content 모두 체크함. 비밀번호만 전송하므로 hasErrors로 유효성 체크시 항상 오류난다.
+			이럴 경우 Validator를 따로 하나 만들거나, 다른 메서드 활용해야함 -> hasErrors 대신 hasFieldErrors 사용
+			hasErrors 는 모든 필드 중 오류가 하나라도 있으면 true, hasFiledErrors는 필드 지정하여 오류 있으면 true 없으면 false.
+		*/
+		
+		/*
+		 * BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		 * 비밀번호 전송 여부만 체크
+		 */
+		if(result.hasFieldErrors("passwd")) {
+			return "deleteForm";
+		}
+		
+		//비밀번호 일치 여부 체크
+		//DB에 저장된 비밀번호 구하기
+		BoardCommand dbBoard = boardService.getBoard(boardCommand.getNum());
+		
+		//비밀번호 체크
+		if(!dbBoard.getPasswd().equals(boardCommand.getPasswd())) {	//일치하지 않으면 result에 에러 저장후 폼 호출
+								//필드		에러코드
+			result.rejectValue("passwd", "invalidPassword");
+			return "deleteForm";
+		}
+		
+		//글 삭제
+		boardService.deleteBoard(boardCommand.getNum());
+		
+		return "redirect:/list.do";
+	}
 }
