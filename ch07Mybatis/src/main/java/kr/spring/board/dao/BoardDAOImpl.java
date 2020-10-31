@@ -18,11 +18,13 @@ public class BoardDAOImpl implements BoardDAO {
 	@Resource
 	private SqlSessionTemplate sqlSession;
 	
+	//글 등록
 	@Override
 	public void insertBoard(BoardCommand board) {
 		sqlSession.insert("insertBoard", board);
 	}
 
+	//총 게시글 수(레코드 수) 반환
 	@Override
 	public int getBoardCount() {
 		Integer count = sqlSession.selectOne("getBoardCount");
@@ -30,6 +32,7 @@ public class BoardDAOImpl implements BoardDAO {
 		return count;
 	}
 
+	//게시글 목록 반환(데이터 베이스에 저장된 데이터(글)의 행번호 startRow~endRow까지)
 	@Override
 	public List<BoardCommand> getBoardList(Map<String, Object> map) {
 		List<BoardCommand> list = sqlSession.selectList("getBoardList", map);
@@ -37,22 +40,24 @@ public class BoardDAOImpl implements BoardDAO {
 		return list;
 	}
 
+	//글 번호로 게시글 반환
 	@Override
 	public BoardCommand getBoard(int num) {
-		// TODO Auto-generated method stub
-		return null;
+		BoardCommand board = sqlSession.selectOne("getBoard", num);
+		
+		return board;
 	}
-
+	
+	//글 수정
 	@Override
 	public void updateBoard(BoardCommand board) {
-		// TODO Auto-generated method stub
-		
+		sqlSession.update("updateBoard", board);
 	}
-
+	
+	//글 삭제
 	@Override
 	public void deleteBoard(int num) {
-		// TODO Auto-generated method stub
-		
+		sqlSession.delete("deleteBoard", num);
 	}
 
 }
