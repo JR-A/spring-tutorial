@@ -16,4 +16,9 @@ public class IndexController {
 	public String getMenu1() {
 		return "menu1";
 	}
+	
+	@RequestMapping("/menu2.do")
+	public String getMenu2() {
+		return "menu2";
+	}
 }
