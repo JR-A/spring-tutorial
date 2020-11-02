@@ -195,7 +195,7 @@ public class BoardController {
 		/*
 		 * BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
 		 * hasErrors 는 모든 필드 중 오류가 하나라도 있으면 true, hasFiledErrors는 필드 지정하여 오류 있으면 true 없으면 false.
-		 * 비밀번호 전송 여부만 체크
+		 * 비밀번호 전송 여부만 체크 or 글번호와 비밀번호 프로퍼티로 갖는 자바빈 따로 생성해야함
 		 */
 		if(result.hasFieldErrors("passwd")) {
 			return "deleteForm";

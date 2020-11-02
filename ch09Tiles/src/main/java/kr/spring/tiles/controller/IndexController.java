@@ -9,7 +9,7 @@ public class IndexController {
 	@RequestMapping("/index.do")
 	public String getIndex() {
 		//뷰 이름 : tiles의 설정파일인 tilesdef.xml에 명시한 definition name
-		return "index";
+		return "index";	//jsp파일 호출이 아님
 	}
 	
 	@RequestMapping("/menu1.do")
