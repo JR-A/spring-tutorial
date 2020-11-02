@@ -11,4 +11,9 @@ public class IndexController {
 		//뷰 이름 : tiles의 설정파일인 tilesdef.xml에 명시한 definition name
 		return "index";
 	}
+	
+	@RequestMapping("/menu1.do")
+	public String getMenu1() {
+		return "menu1";
+	}
 }

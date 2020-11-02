@@ -5,11 +5,17 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+	<!-- 기본 설정 -->
 	<definition name="index" template="/WEB-INF/views/template/layout.jsp">
 		<put-attribute name="title" value="Spring Index"/>
 		<put-attribute name="menu" value="/WEB-INF/views/template/menu.jsp"/>
 		<put-attribute name="header" value="/WEB-INF/views/template/header.jsp"/>
 		<put-attribute name="body" value="/WEB-INF/views/body.jsp"/>
 		<put-attribute name="footer" value="/WEB-INF/views/template/footer.jsp"/>
+	</definition>
+	<!-- index를 상속. 바뀌는 부분만 명시 -->
+	<definition name="menu1" extends="index">
+		<put-attribute name="title" value="Spring menu1"/>
+		<put-attribute name="body" value="/WEB-INF/views/menu1.jsp"/>
 	</definition>
 </tiles-definitions>
