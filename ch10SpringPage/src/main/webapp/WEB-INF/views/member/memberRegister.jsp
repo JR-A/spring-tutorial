@@ -15,42 +15,42 @@
 				<%-- 로딩gif --%>
 				<img id="lodaing" src="${pageContext.request.contextPath}/resources/images/ajax-loader.gif" width="16" height="16" style="display:none;">
 				<span id="message_id"></span> <%-- 아이디 중복체크 메세지 --%>
-				<form:errors path="id"/> <%-- 아이디 유효성체크(입력여부) --%>
+				<form:errors path="id" cssClass="error-color"/> <%-- 아이디 유효성체크(입력여부) --%>
 			</li>
 			<li>
 				<label for="name">이름</label>
 				<form:input path="name"/>
-				<form:errors path="name"/>
+				<form:errors path="name" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="passwd">비밀번호</label>
 				<form:password path="passwd"/>
-				<form:errors path="passwd"/>
+				<form:errors path="passwd" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="phone">전화번호</label>
 				<form:input path="phone"/>
-				<form:errors path="phone"/>
+				<form:errors path="phone" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="email">이메일</label> <%-- 어노테이션 유효성 테스트 위해 email html태그가 아닌 커스텀태그 사용(태그에서 유효성 체크 하지 않고 서버단에서 체크하는것 테스트) --%>
 				<form:input path="email"/>
-				<form:errors path="email"/>
+				<form:errors path="email" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="zipcode">우편번호</label>
 				<form:input path="zipcode"/>
-				<form:errors path="zipcode"/>
+				<form:errors path="zipcode" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="address1">주소</label>
 				<form:input path="address1"/>
-				<form:errors path="address1"/>
+				<form:errors path="address1" cssClass="error-color"/>
 			</li>
 			<li>
 				<label for="address2">상세주소</label>
 				<form:input path="address2"/>
-				<form:errors path="address2"/>
+				<form:errors path="address2" cssClass="error-color"/>
 			</li>
 		</ul>
 		<div class="align-center">
