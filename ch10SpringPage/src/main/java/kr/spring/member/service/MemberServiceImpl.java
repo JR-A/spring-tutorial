@@ -22,12 +22,12 @@ public class MemberServiceImpl implements MemberService {
 		memberMapper.insertMember_detail(member); //3.
 		
 		// 1~3 모두 성공해야 commit, 아니면 rollback
+		//원자성 : 한 트랜잭션 내에서 실행한 작업들은 하나로 간주. 즉, 모두 성공 또는 모두 실패. 
 	}
 
 	@Override
 	public MemberVO selectCheckMember(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return memberMapper.selectCheckMember(id);
 	}
 
 	@Override
