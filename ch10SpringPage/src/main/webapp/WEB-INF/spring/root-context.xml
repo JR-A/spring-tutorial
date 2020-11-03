@@ -39,13 +39,35 @@
 		<property name="maxWait" value="5"/>                                        
 	</bean>
 	
+	<!-- JDBC 기반 트랜잭션 관리자 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		  p:dataSource-ref="dataSource"/>
+		  
+	<!-- 선언적 트랜잭션 처리 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">	<!-- 관리자 연결 -->
+		<!-- 트랜잭션을 어떤 메서드에 적용할것인지 -->
+		<tx:attributes>
+			<tx:method name="insert*"/>	<!-- insert로 시작하는 메서드는 트랜잭션단위 -->
+			<tx:method name="update*"/>	<!-- update로 시작하는 메서드는 트랜잭션 단위 -->
+			<tx:method name="delete*"/> <!-- delete로 시작하는 메서드는 트랜잭션 단위 -->
+			<tx:method name="select*" read-only="true"/> <!-- select로 시작하는 메서드는 트랜잭션단위. 데이터 변경하지 않는 읽기전용. -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- AOP 설정 -->
+	<aop:config>
+		<!-- Pointcut 설정 : 실제로 Advice가 적용되는 Joinpoint -->
+		<aop:pointcut expression="execution(public *  kr.spring..*ServiceImpl.*(..))" id="servicePublicMethod"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePublicMethod"/>	<!-- 메서드와 연결 -->
+	</aop:config>
+	
 	<!-- mybatis 설정 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
-		<property name="typeAliasesPackage" value="kr.spring.board.vo"/>	
+		<property name="typeAliasesPackage" value="kr.spring.member.vo"/> <!-- vo하위의 자바빈 모두 스캔하여 알리아스처리 -->
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="kr.spring.board.dao"/>
+		<property name="basePackage" value="kr.spring.member.dao"/>
 	</bean>
 	
 	
