@@ -184,4 +184,53 @@ public class MemberController {
 		
 		return "redirect:/member/myPage.do";
 	}
+	
+	//비밀번호 변경 폼 - GET방식으로 전송시
+	@RequestMapping(value="/member/changePassword.do", method=RequestMethod.GET)
+	public String formChangePassword() {
+		
+		return "memberChangePassword";
+	}
+	
+	//비밀번호 변경 - POST방식으로 전송시
+	@RequestMapping(value="/member/changePassword.do", method=RequestMethod.POST)
+	public String submitChangePassword(@Valid MemberVO memberVO, BindingResult result, HttpSession session) { //mem_num가져오기 위한 session
+		
+		//전송된 데이터 유효성 체크 -> 폼에서 자바스크립트로, 서버단에서 @Valid 어노테이션으로 체크
+		
+		//로그 처리
+		if(log.isDebugEnabled()) {
+			log.debug("<<비밀번호 변경 처리>> : " + memberVO);
+		}
+		
+		/*
+		 * BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		 * now_passwd, passwd 필드 전송됐는지 여부 체크
+		 */
+		if(result.hasFieldErrors("now_passwd") || result.hasFieldErrors("passwd")) {
+			return "memberChangePassword";	
+		}
+		
+		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
+		MemberVO vo = (MemberVO)session.getAttribute("user");
+		//현재 비밀번호(now_passwd)와 변경할 비밀번호(passwd)가 저장된 자바빈에 회원 번호 저장
+		memberVO.setMem_num(vo.getMem_num());
+		
+		//비밀번호 일치 여부 체크
+		//회원 번호로 DB에서 회원정보 읽어오기
+		MemberVO member = memberService.selectMember(memberVO.getMem_num());
+		
+		//입력한 현재 비밀번호 DB에서 읽어온 비밀번호 일치 여부 체크
+		if(!member.getPasswd().equals(memberVO.getNow_passwd())) { //일치하지 않으면 result에 오류 저장후 form 호출
+								//필드		에러코드
+			result.rejectValue("now_passwd", "invalidPassword");
+			
+			return "memberChangePassword";
+		}
+		
+		//비밀번호 변경
+		memberService.updatePassword(memberVO);
+		
+		return "redirect:/member/myPage.do";
+	}
 }

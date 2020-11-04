@@ -21,6 +21,7 @@ public interface MemberMapper {
 	public MemberVO selectMember(Integer mem_num);
 	@Update("UPDATE spmember_detail SET name=#{name}, phone=#{phone}, email=#{email}, zipcode=#{zipcode}, address1=#{address1}, address2=#{address2}, modify_date=SYSDATE WHERE mem_num=#{mem_num}")
 	public void updateMember(MemberVO member);
+	@Update("UPDATE spmember_detail SET passwd=#{passwd} WHERE mem_num=#{mem_num}")
 	public void updatePassword(MemberVO member);
 	public void deleteMember(Integer mem_num);
 	public void deleteMember_detail(Integer mem_num);

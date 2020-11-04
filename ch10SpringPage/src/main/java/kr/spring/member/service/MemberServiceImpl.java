@@ -42,8 +42,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void updatePassword(MemberVO member) {
-		// TODO Auto-generated method stub
-		
+		memberMapper.updatePassword(member);
 	}
 
 	@Override
