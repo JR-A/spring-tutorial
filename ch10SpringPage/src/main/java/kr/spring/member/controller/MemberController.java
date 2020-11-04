@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,7 +96,6 @@ public class MemberController {
 				//비밀번호 일치여부 체크
 				check = member.isCheckedPasswd(memberVO.getPasswd());
 			}
-			
 			if(check) {
 				//인증 성공, 로그인 처리
 				session.setAttribute("user", member);
@@ -105,14 +105,42 @@ public class MemberController {
 				//인증 실패
 				throw new LoginCheckException();
 			}
-
 		}catch(LoginCheckException e) {
 			//인증 실패
 			result.reject("invalidIdOrPassword");
 			
 			return formLogin();
 		}
+	}
+	
+	
+	//로그아웃 처리
+	@RequestMapping("/member/logout.do")
+	public String processLogout(HttpSession session) {
+		//로그아웃
+		session.invalidate(); //세션 무효화
 		
+		return "redirect:/main/main.do";
+	}
+	
+	//마이페이지(회원 상세 정보)
+	@RequestMapping("/member/myPage.do")
+	public String process(HttpSession session, Model model) {	//mem_num가져오기 위한 session, 데이터 전달 위한 mode
+		
+		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
+		MemberVO vo = (MemberVO)session.getAttribute("user");
+		
+		//회원 정보
+		MemberVO member = memberService.selectMember(vo.getMem_num());
+		
+		//로그처리
+		if(log.isDebugEnabled()) {
+			log.debug("<<회원 상세 정보>> : " + member);
+		}
+		
+		model.addAttribute("member", member);	//model이용해 데이터를 request에 저장
+		
+		return "memberView";	//definition name 호출(member.xml에 저장된 모듈화된 페이지)
 	}
 	
 }
