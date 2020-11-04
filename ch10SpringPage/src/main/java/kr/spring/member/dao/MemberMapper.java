@@ -2,6 +2,7 @@ package kr.spring.member.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import kr.spring.member.vo.MemberVO;
 
@@ -18,6 +19,7 @@ public interface MemberMapper {
 	public MemberVO selectCheckMember(String id);
 	@Select("SELECT * FROM spmember m JOIN spmember_detail d ON m.mem_num=d.mem_num WHERE m.mem_num = #{mem_num}")
 	public MemberVO selectMember(Integer mem_num);
+	@Update("UPDATE spmember_detail SET name=#{name}, phone=#{phone}, email=#{email}, zipcode=#{zipcode}, address1=#{address1}, address2=#{address2}, modify_date=SYSDATE WHERE mem_num=#{mem_num}")
 	public void updateMember(MemberVO member);
 	public void updatePassword(MemberVO member);
 	public void deleteMember(Integer mem_num);

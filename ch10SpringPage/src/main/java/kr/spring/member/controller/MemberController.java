@@ -125,7 +125,7 @@ public class MemberController {
 	
 	//마이페이지(회원 상세 정보)
 	@RequestMapping("/member/myPage.do")
-	public String process(HttpSession session, Model model) {	//mem_num가져오기 위한 session, 데이터 전달 위한 mode
+	public String process(HttpSession session, Model model) {	//mem_num가져오기 위한 session, 데이터 전달 위한 model
 		
 		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
 		MemberVO vo = (MemberVO)session.getAttribute("user");
@@ -143,4 +143,45 @@ public class MemberController {
 		return "memberView";	//definition name 호출(member.xml에 저장된 모듈화된 페이지)
 	}
 	
+	//회원 정보 수정 폼 - GET방식으로 전송시
+	@RequestMapping(value="/member/update.do", method=RequestMethod.GET)
+	public String formUpdate(HttpSession session, Model model) {	//mem_num가져오기 위한 session, 데이터 전달 위한 model
+		
+		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
+		MemberVO vo = (MemberVO)session.getAttribute("user");
+		
+		//회원 정보
+		MemberVO member = memberService.selectMember(vo.getMem_num());
+		
+		model.addAttribute("member", member);	//model이용해 데이터를 request에 저장
+		
+		return "memberModify";
+	}
+	
+	//회원 정보 수정 처리 - POST방식으로 전송시
+	@RequestMapping(value="/member/update.do", method=RequestMethod.POST)
+	public String submitUpdate(@Valid MemberVO memberVO, BindingResult result, HttpSession session) { //mem_num가져오기 위한 session
+		
+		//전송된 데이터 유효성 체크 -> @Valid 어노테이션으로 체크
+		
+		//로그 처리
+		if(log.isDebugEnabled()) {
+			log.debug("<<회원 정보 수정>> : " + memberVO);
+		}
+		
+		//BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		if(result.hasErrors()) {
+			return "memberModify";
+		}
+		
+		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
+		MemberVO vo = (MemberVO)session.getAttribute("user");
+		//전송된 데이터가 저장된 자바빈에 회원 번호를 저장
+		memberVO.setMem_num(vo.getMem_num());
+		
+		//회원 정보 수정
+		memberService.updateMember(memberVO);
+		
+		return "redirect:/member/myPage.do";
+	}
 }

@@ -13,7 +13,7 @@ public class MemberVO {
 	//프로퍼티
 	//spmember 테이블 컬럼
 	private int mem_num;
-	@NotEmpty
+	@Size(min=4,max=10)
 	private String id;
 	private int auth;	/*0:탈퇴회원, 1:정지회원, 2:일반회원, 3:관리자*/ //default값 : 2
 	//spmember_detail 테이블 컬럼

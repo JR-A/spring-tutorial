@@ -63,11 +63,12 @@
 		</beans:property>
 	</beans:bean>
 	
-	<!-- Interceptor 설정 -->
+	<!-- Interceptor 설정. 로그인 여부 체크 -->
 	<interceptors>
-		<!-- myPage.do실행하기 전 LoginCheckInterceptor가 낚아챔. 로그인 여부 체크 후 boolean반환 -->
+		<!-- mapping된 .do 실행하기 전 LoginCheckInterceptor가 낚아챔. 로그인 여부 체크 후 boolean반환 -->
 		<interceptor>
 			<mapping path="/member/myPage.do"/>
+			<mapping path="/member/update.do"/>
 			<beans:bean class="kr.spring.interceptor.LoginCheckInterceptor"/>
 		</interceptor>
 	</interceptors>
