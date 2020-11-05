@@ -26,15 +26,16 @@
 	
 	<!-- @Controller 오토스캔 -->
 	<context:component-scan base-package="kr.spring.main.controller"/>
-	<!-- @Controller 오토스캔 -->
 	<context:component-scan base-package="kr.spring.member.controller" />
+	<context:component-scan base-package="kr.spring.board.controller" />
 	
-	<!-- Tiles 설정파일(main.xml, member.xml) 등록 -->
+	<!-- ============ Tiles 설정파일(main.xml, member.xml, board.xml) 등록 ================= -->
 	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
 		<beans:property name="definitions">
 			<beans:list>
 				<beans:value>/WEB-INF/tiles-def/main.xml</beans:value>	<!-- 첫 화면 설정 -->
 				<beans:value>/WEB-INF/tiles-def/member.xml</beans:value>
+				<beans:value>/WEB-INF/tiles-def/board.xml</beans:value>
 			</beans:list>
 		</beans:property>
 	</beans:bean>
@@ -77,5 +78,7 @@
 	
 	<!-- BLOB 타입 이미지 표시(byte배열->inputStream 생성) -->
 	<beans:bean id="imageView" class="kr.spring.view.ImageView"/>
+	
+	
 	
 </beans:beans>
