@@ -38,7 +38,7 @@
 				cache: false,				//예전 데이터 저장해 사용하지 않도록 제한
 				timeout: 30000,				//ms(1/1000초).  3초 지나도 정보 도착하지 않으면 포기
 				success: function(data){	//서버로부터 데이터가 성공적으로 도착하면 호출되는 함수
-											//data: ajax메소드가 서버로부터 전송받은 데이터(param는 매개변수명이므로 변경가능)
+											//data: ajax메소드가 서버로부터 전송받은 데이터(매개변수명이므로 변경가능)
 					$('#loading').hide();	//로딩이미지 숨김
 						//.key로 value 접근
 					if(data.result == 'idNotFound'){			//아이디 미중복
