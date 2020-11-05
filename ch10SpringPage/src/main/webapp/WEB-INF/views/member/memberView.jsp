@@ -20,7 +20,7 @@
 		$('#upload').change(function(){
 			var upload = document.getElementById('upload');
 			
-			//새로 선택된 이미지파일(binary data) 보관
+			//새로 선택된 이미지파일 보관
 			my_photo = upload.files[0];	//파일을 여러 개 업로드할 수 있으므로 배열에 보관되지만, 우리는 업로드 하나만 하므로 0번째 파일만존재
 			if(my_photo){
 				var reader = new FileReader();
@@ -108,7 +108,7 @@
 				<input type="button" value="수정" id="photo_btn">
 			</div>
 			<div id="photo_choice" style="display:none;">
-				<input type="file" id="upload" accept="image/gif,image/png,image/jpeg">
+				<input type="file" id="upload" accept="image/gif,image/png,image/jpeg"> <%-- Ajax방식으로 처리하므로 name 생략가능 --%>
 				<input type="button" value="전송" id="photo_submit">
 				<input type="button" value="취소" id="photo_reset">
 			</div>
