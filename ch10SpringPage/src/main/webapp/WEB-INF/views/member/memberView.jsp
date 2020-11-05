@@ -55,13 +55,13 @@
 			//binary data(이미지) 전송 위해 FormData객체 생성
 			//FormData는 <form>태그가 전송된 것 같은 효과를 가져다주는 key/value 가 저장되는 객체
 			var form_data = new FormData();
-			form_data.append('upload', my_photo);
+			form_data.append('upload', my_photo);	//setter찾아서 세팅
 			
 			//서버와 ajax비동기 통신
 			$.ajax({
 				url: 'updateMyPhoto.do',	//요청URL - MemberAjaxController.java참고
 				type: 'POST',				//전송방식
-				data: form_data,			//서버에 전송할 데이터 - setter찾아서 byte[]파일, 파일명 세팅
+				data: form_data,			//서버에 전송할 데이터 - setter찾아서 (MultipartFile -> byte[])파일, 파일명 세팅
 				dataType: 'json',			//서버가 전송하는 데이터 형식
 				cache: false,				//예전 데이터 사용하지 않도록 제한
 				contentType: false,			//default값이 utf-8이므로 multipart/form-data 전송 위해 false로 처리
