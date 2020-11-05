@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.spring.member.service.MemberService;
 import kr.spring.member.vo.MemberVO;
@@ -288,5 +289,22 @@ public class MemberController {
 			return "memberDelete";
 		}
 		
+	}
+	
+	//프로필 이미지 출력 - header.jsp, memberView.jsp에서 호출
+	@RequestMapping("/member/photoView.do")
+	public ModelAndView viewImage(HttpSession session) {
+		
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		MemberVO memberVO = memberService.selectMember(user.getMem_num());
+		
+		ModelAndView mav = new ModelAndView();
+		//뷰 이름 설정
+		mav.setViewName("imageView");//파일 다운로드시 사용하는 viewResolver에 의해, mav를 반환하면 dispatcherServlet이 같은 beanName가진 bean호출
+		//데이터 저장
+		mav.addObject("imageFile", memberVO.getPhoto());
+		mav.addObject("filename", memberVO.getPhotoname());
+		
+		return mav;
 	}
 }

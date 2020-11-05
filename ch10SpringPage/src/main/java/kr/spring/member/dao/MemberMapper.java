@@ -28,4 +28,8 @@ public interface MemberMapper {
 	public void deleteMember(Integer mem_num);
 	@Delete("DELETE FROM spmember_detail WHERE mem_num=#{mem_num}")
 	public void deleteMember_detail(Integer mem_num);
+	//프로필 이미지 업데이트
+	@Update("UPDATE spmember_detail SET photo=#{photo}, photoname=#{photoname} WHERE mem_num=#{mem_num}")
+	public void updateProfile(MemberVO member);
 }
+

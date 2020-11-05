@@ -51,4 +51,9 @@ public class MemberServiceImpl implements MemberService {
 		memberMapper.deleteMember_detail(mem_num);
 	}
 
+	@Override
+	public void updateProfile(MemberVO member) {
+		memberMapper.updateProfile(member);
+	}
+
 }

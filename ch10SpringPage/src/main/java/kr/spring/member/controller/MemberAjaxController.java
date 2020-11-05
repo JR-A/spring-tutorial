@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,6 @@ public class MemberAjaxController {
 	
 	//로그 처리(로그 대상 지정)
 	private Logger log = Logger.getLogger(this.getClass());
-	
-	//자바빈(VO) 초기화후 request에 등록
 	
 	//아이디 중복체크
 	@RequestMapping("/member/confirmId.do")
@@ -47,6 +46,35 @@ public class MemberAjaxController {
 		}
 		
 		//http://localhost:8080/ch10SpringPage/member/confirmId.do?id=kim2 GET방식으로 JSON 제대로 나오는지 테스트해보기
+		
+		return map;
+	}
+	
+	//프로필 사진 업데이트
+	@RequestMapping("/member/updateMyPhoto.do")
+	@ResponseBody
+	public Map<String, String> processProfile(MemberVO memberVO, HttpSession session){
+		Map<String, String> map = new HashMap<String, String>();
+		
+		//로그인 여부 체크 - Interceptor 사용하면 로그인폼으로 이동하므로 여기선 우리가 체크함
+		
+		//세션에 저장된 회원 정보 반환
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		if(user == null) {
+			//로그인 되지 않은 상태
+			map.put("result", "logout");
+		}else {
+			//로그인 된 상태
+			memberVO.setMem_num(user.getMem_num());
+			
+			//이미지 업로드
+			memberService.updateProfile(memberVO);
+			
+			//세션에 저장된 회원 정보의 파일이름 교체
+			user.setPhotoname(memberVO.getPhotoname());
+			
+			map.put("result", "success");
+		}
 		
 		return map;
 	}

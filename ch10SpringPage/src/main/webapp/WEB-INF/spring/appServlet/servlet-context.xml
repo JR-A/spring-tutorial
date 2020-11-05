@@ -75,4 +75,7 @@
 		</interceptor>
 	</interceptors>
 	
+	<!-- BLOB 타입 이미지 표시(byte배열->inputStream 생성) -->
+	<beans:bean id="imageView" class="kr.spring.view.ImageView"/>
+	
 </beans:beans>

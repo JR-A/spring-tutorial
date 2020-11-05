@@ -5,10 +5,10 @@
 <h2 class="align-center">회원제 게시판</h2>
 <div class="align-right">
 	<c:if test="${!empty user && !empty user.photoname}"> <!-- 회원사진이 있으면 표시 -->
-	<img src="${pageContext.request.contextPath}/upload/member/${user.photo}" class="my-photo">
+	<img class="my-photo" src="${pageContext.request.contextPath}/member/photoView.do" width="25" height="25">
 	</c:if>
 	<c:if test="${!empty user && empty user.photoname}"> <!-- 회원사진이 없으면 blank 이미지 표시 -->
-	<img src="${pageContext.request.contextPath}/resources/images/blank.jpg" width="25" height="25" class="my-photo">
+	<img class="my-photo" src="${pageContext.request.contextPath}/resources/images/blank.jpg" width="25" height="25">
 	</c:if>
 	<c:if test="${!empty user}"> <!-- 로그인된 상태이면 -->
 	[<span>${user.id}</span>]
