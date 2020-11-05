@@ -233,4 +233,60 @@ public class MemberController {
 		
 		return "redirect:/member/myPage.do";
 	}
+	
+	//회원 탈퇴 폼 - GET방식으로 전송시
+	@RequestMapping(value="/member/delete.do", method=RequestMethod.GET)
+	public String formDelete() {
+		
+		return "memberDelete";
+	}
+	
+	//회원 탈퇴 처리 - POST방식으로 전송시
+	@RequestMapping(value="/member/delete.do", method=RequestMethod.POST)
+	public String submitDelete(@Valid MemberVO memberVO, BindingResult result, HttpSession session) {
+		
+		//전송된 데이터 유효성 체크 -> @Valid 어노테이션으로 체크
+		
+		//로그처리
+		if(log.isDebugEnabled()) {
+			log.debug("<<회원탈퇴>> : " + memberVO);
+		}
+		
+		/*
+		 * BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		 * id, passwd 필드 전송됐는지 여부 체크
+		 */
+		if(result.hasFieldErrors("id") || result.hasFieldErrors("passwd")) {
+			return "memberDelete";
+		}
+		
+		//세션에 저장된 회원 정보 반환 -> 회원 번호 얻기위함
+		MemberVO vo = (MemberVO)session.getAttribute("user");
+		//전송된 아이디(id)와 비밀번호(passwd)가 저장된 자바빈에 회원 번호 저장
+		memberVO.setMem_num(vo.getMem_num());
+		
+		//회원 번호로 DB에서 회원정보 읽어오기
+		MemberVO member = memberService.selectMember(memberVO.getMem_num());
+		
+		//비밀번호 일치여부 체크
+		boolean check = false;
+		if(member!=null && memberVO.getId().equals(vo.getId())) {	//회원 정보가 존재하고, 전송된 아이디와 현재 세션의 아이디가 일치하는지 체크
+			check = member.isCheckedPasswd(memberVO.getPasswd()); //전송된 비밀번호와 DB에서 가져온 회원의 비밀번호 일치 여부 체크
+		}
+		
+		if(check) {
+			//인증 성공, 회원정보 삭제
+			memberService.deleteMember(memberVO.getMem_num());
+			//로그아웃
+			session.invalidate();
+			
+			return "redirect:/main/main.do";
+		}else {
+			//인증 실패
+			result.reject("invalidIdOrPassword");
+			
+			return "memberDelete";
+		}
+		
+	}
 }

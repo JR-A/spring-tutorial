@@ -1,5 +1,6 @@
 package kr.spring.member.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -23,6 +24,8 @@ public interface MemberMapper {
 	public void updateMember(MemberVO member);
 	@Update("UPDATE spmember_detail SET passwd=#{passwd} WHERE mem_num=#{mem_num}")
 	public void updatePassword(MemberVO member);
+	@Update("UPDATE spmember SET auth=0 WHERE mem_num=#{mem_num}")
 	public void deleteMember(Integer mem_num);
+	@Delete("DELETE FROM spmember_detail WHERE mem_num=#{mem_num}")
 	public void deleteMember_detail(Integer mem_num);
 }

@@ -47,8 +47,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void deleteMember(Integer mem_num) {
-		// TODO Auto-generated method stub
-		
+		memberMapper.deleteMember(mem_num);
+		memberMapper.deleteMember_detail(mem_num);
 	}
 
 }
