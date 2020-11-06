@@ -81,9 +81,9 @@ public class BoardController {
 		//뷰 이름 설정
 		mav.setViewName("boardList");	//definition name (member.xml에 저장된 모듈화된 페이지)
 		//데이터 저장
-		mav.addObject("count", count);
-		mav.addObject("list", list);
-		mav.addObject("pagingHtml", page.getPagingHtml());
+		mav.addObject("count", count);		//총 게시글 수 (또는 검색된 게시글 수)
+		mav.addObject("list", list);		//글 목록
+		mav.addObject("pagingHtml", page.getPagingHtml());	//페이지 표시 문자열
 		
 		return mav;
 	}
@@ -122,4 +122,23 @@ public class BoardController {
 		return "redirect:/board/list.do";
 		
 	}
+	
+	//글 상세
+	@RequestMapping("/board/detail.do")
+	public ModelAndView process(@RequestParam int board_num) {
+		if(log.isDebugEnabled()) {
+			log.debug("<<글 상세>> : " + board_num);
+		}
+		
+		//해당 글의 조회수 증가
+		boardService.updateHit(board_num);
+		
+		//게시글 정보(글 번호로 게시글 객체 반환)
+		BoardVO board = boardService.selectBoard(board_num);
+		
+		//ModelAndView(String viewName, String modelName, Object modelObject)
+		//viewName은 board.xml의 definition name
+		return new ModelAndView("boardView", "board", board);
+	}
+	
 }

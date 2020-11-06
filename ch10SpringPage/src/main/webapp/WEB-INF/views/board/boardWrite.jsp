@@ -19,8 +19,8 @@
 				<form:errors path="content" cssClass="error-color"/>
 			</li>
 			<li>
-				<label for="upload">파일</label>
-				<input type="file" id="upload" name="upload">
+				<label for="upload">이미지 파일 업로드</label>	 <%-- 주의)유효성체크로는 사용할 수 없음! 모든파일 선택하여 아무 파일 올릴수도있음 --%>
+				<input type="file" id="upload" name="upload" accept="image/gif, image/png, image/jpeg">
 			</li>
 		</ul>
 		<div class="align-center">
