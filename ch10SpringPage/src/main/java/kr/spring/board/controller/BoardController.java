@@ -141,4 +141,19 @@ public class BoardController {
 		return new ModelAndView("boardView", "board", board);
 	}
 	
+	//게시글 이미지 출력 - boardView.jsp에서 호출
+	@RequestMapping("/board/imageView.do")
+	public ModelAndView viewImage(@RequestParam int board_num) {
+		
+		BoardVO board = boardService.selectBoard(board_num);
+		
+		ModelAndView mav = new ModelAndView();
+		//뷰 이름 설정
+		mav.setViewName("imageView"); //파일 다운로드시 사용하는 viewResolver에 의해, mav를 반환하면 dispatcherServlet이 같은 beanName가진 bean호출
+		//데이터 저장
+		mav.addObject("imageFile", board.getUploadfile());	//byte[]
+		mav.addObject("filename", board.getFilename());		//String
+		
+		return mav;
+	}
 }
