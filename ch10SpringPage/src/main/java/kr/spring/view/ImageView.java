@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
-//BLOB 타입 이미지 표시 (byte배열->inputStream 생성)
+//BLOB 타입 이미지 표시 (byte배열->inputStream 생성) AbstractView 상속!
 public class ImageView extends AbstractView {
 
 	@Override
@@ -54,12 +54,17 @@ public class ImageView extends AbstractView {
 				+ fileName + "\";");
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		
-		OutputStream out = response.getOutputStream();
+		OutputStream out = response.getOutputStream();	//출력스트림
 		
 		//바이트배열로 스트림 생성
 		InputStream input = new ByteArrayInputStream(file);
 		IOUtils.copy(input, out);
-		out.flush();
+		/*
+		 * int copy(InputStream input,OutputStream output)
+		 * Copies bytes from an InputStream to an OutputStream.
+		 * This method buffers the input internally, so there is no need to use a BufferedInputStream. 
+		 */
+		out.flush();		//출력스트림 비우기. 버퍼에 남은것 모두 출력
 		out.close();
 		input.close();
 	}

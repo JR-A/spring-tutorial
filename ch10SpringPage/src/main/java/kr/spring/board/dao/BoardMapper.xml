@@ -31,4 +31,21 @@
 		ON b.mem_num = m.mem_num
 	</select>
 	
+	
+	<!-- 동적 SQL! 파일이 있는경우와 없는 경우. 파일이 있는 경우 부분 SQL 만들어냄 -->
+	<!-- 글 수정 -->
+	<update id="updateBoard" parameterType="boardVO">
+		UPDATE spboard SET
+			<if test="filename!=''">
+			 uploadfile=#{uploadfile},
+			 filename=#{filename},
+			</if>
+			title=#{title},
+			content=#{content},
+			ip=#{ip},
+			modify_date=SYSDATE
+		WHERE board_num=#{board_num}
+	</update>
+	<!-- form에서 upload 전송될 때 파일을 올리지 않더라도 파일 객체는 생성되므로 setter동작하여 filename이 null이 아닌 빈문자열로 전송됨 -->
+		
 </mapper>

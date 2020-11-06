@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,5 +156,48 @@ public class BoardController {
 		mav.addObject("filename", board.getFilename());		//String
 		
 		return mav;
+	}
+	
+	//글 수정 폼 - GET방식으로 전송시
+	@RequestMapping(value="/board/update.do", method=RequestMethod.GET)
+	public String form(@RequestParam int board_num, Model model) {
+		
+		BoardVO boardVO = boardService.selectBoard(board_num);
+		
+		model.addAttribute("boardVO", boardVO);
+		
+		return "boardModify"; //definition name
+	}
+	
+	//글 수정 처리 - POST방식으로 전송시
+	@RequestMapping(value="/board/update.do", method=RequestMethod.POST)      	//ip주소					유저의 회원번호
+	public String submitUpdate(@Valid BoardVO boardVO, BindingResult result, HttpServletRequest request, HttpSession session, Model model) {
+		
+		if(log.isDebugEnabled()) {
+			log.debug("<<글 수정>> : " + boardVO);
+		}
+		
+		//BindingResult에 유효성 체크 결과 오류에 대한 내용이 저장돼있으면 form을 호출
+		if(result.hasErrors()) {
+			return "boardModify";	//definition name
+		}
+		
+		//ip주소 세팅
+		boardVO.setIp(request.getRemoteAddr());
+		
+		//회원 번호 세팅
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		boardVO.setMem_num(user.getMem_num());
+		//boardVO.setMem_num(((MemberVO)session.getAttribute("user")).getMem_num()); 변수 사용하지 않고 바로 명시해도 됨
+
+		//글 수정 처리
+		boardService.updateBoard(boardVO);
+		
+		//View에 표시할 메시지 (model은 view에 데이터 전달하기위해 사용, 컨테이너가 제공)
+		model.addAttribute("message", "글 수정 완료!");
+		model.addAttribute("url", request.getContextPath()+ "/board/list.do");
+		
+		//Tiles 설정에 아래 뷰 이름이 없으면 단독으로 JSP 호출(우선순위1에 해당사항 없으므로 우선순위2인 원래 resolver동작)
+		return "common/result";
 	}
 }

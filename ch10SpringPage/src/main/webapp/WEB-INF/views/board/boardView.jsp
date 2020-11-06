@@ -22,8 +22,8 @@
 	</p>
 	<hr size="1" width="100%">
 	<div class="align-right">
-		<%-- 수정, 삭제 버튼은 '로그인된 상태이고, 로그인한 아이디와 작성자 아이디가 일치할 때' 표시 --%>
-		<c:if test="${!empty user && user.id == board.id }">
+		<%-- 수정, 삭제 버튼은 '로그인된 상태이고, 로그인한 회원번호와 작성자 회원번호가 일치할 때' 표시 --%>
+		<c:if test="${!empty user && user.mem_num == board.mem_num }">
 			<input type="button" value="수정" onclick="location.href='update.do?board_num=${board.board_num}'">
 			<input type="button" value="삭제" onclick="location.href='delete.do?board_num=${board.board_num}'">
 		</c:if>
