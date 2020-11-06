@@ -64,8 +64,9 @@
 		</beans:property>
 	</beans:bean>
 	
-	<!-- Interceptor 설정. 로그인 여부 체크 -->
+	<!-- Interceptor 설정 -->
 	<interceptors>
+		<!-- 로그인 여부 체크 -->
 		<!-- mapping된 .do 실행하기 전 LoginCheckInterceptor가 낚아챔. 로그인 여부 체크 후 boolean반환 -->
 		<interceptor>
 			<mapping path="/member/myPage.do"/>
@@ -77,11 +78,17 @@
 			<mapping path="/board/delete.do"/>
 			<beans:bean class="kr.spring.interceptor.LoginCheckInterceptor"/>
 		</interceptor>
+		
+		<!-- 로그인 회원번호와 작성자 회원번호 일치여부 체크 -->
+		<interceptor>
+			<mapping path="/board/update.do"/>
+			<mapping path="/board/delete.do"/>
+			<beans:bean class="kr.spring.interceptor.WriteCheckInterceptor"/>
+		</interceptor>
 	</interceptors>
 	
 	<!-- BLOB 타입 이미지 표시(byte배열->inputStream 생성) -->
 	<beans:bean id="imageView" class="kr.spring.view.ImageView"/>
-	
 	
 	
 </beans:beans>
