@@ -200,4 +200,23 @@ public class BoardController {
 		//Tiles 설정에 아래 뷰 이름이 없으면 단독으로 JSP 호출(우선순위1에 해당사항 없으므로 우선순위2인 원래 resolver동작)
 		return "common/result";
 	}
+	
+	//글 삭제 처리
+	@RequestMapping(value="/board/delete.do")				//contextPath				데이터전달
+	public String submitDelete(@RequestParam int board_num, HttpServletRequest request, Model model) {
+		
+		if(log.isDebugEnabled()){
+			log.debug("<<글 삭제>> : " + board_num);
+		}
+		
+		//글 삭제 - 이미 로그인된 상태로 삭제하기 때문에 별도의 유효성 검사 필요없음 (Interceptor들이 이미 체크했음)
+		boardService.deleteBoard(board_num);
+		
+		//View에 표시할 메시지 (model은 view에 데이터 전달하기위해 사용, 컨테이너가 제공)
+		model.addAttribute("message", "글 삭제 완료!");
+		model.addAttribute("url", request.getContextPath()+ "/board/list.do");
+		
+		//Tiles 설정에 아래 뷰 이름이 없으면 단독으로 JSP 호출(우선순위1에 해당사항 없으므로 우선순위2인 원래 resolver동작)
+		return "common/result";
+	}
 }

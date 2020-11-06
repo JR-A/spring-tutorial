@@ -3,12 +3,16 @@ package kr.spring.board.vo;
 import java.io.IOException;
 import java.sql.Date;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class BoardVO {
 	//프로퍼티
 	private int board_num;		//게시판번호 시퀀스
+	@NotEmpty
 	private String title;		//제목
+	@NotEmpty
 	private String content; 	//내용
 	private int hit;			//조회수	디폴트 0
 	private Date reg_date;		//등록일	디폴트 현재시간

@@ -3,6 +3,7 @@ package kr.spring.board.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -20,5 +21,6 @@ public interface BoardMapper {
 	@Update("UPDATE spboard SET hit=hit+1 WHERE board_num=#{board_num}")
 	public void updateHit(Integer board_num);
 	public void updateBoard(BoardVO board);
+	@Delete("DELETE FROM spboard WHERE board_num=#{board_num}")
 	public void deleteBoard(Integer board_num);
 }

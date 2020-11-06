@@ -49,8 +49,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void deleteBoard(Integer board_num) {
-		// TODO Auto-generated method stub
-		
+		boardMapper.deleteBoard(board_num);
 	}
 
 }
