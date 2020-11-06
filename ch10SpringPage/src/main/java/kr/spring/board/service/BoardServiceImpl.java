@@ -31,8 +31,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void insertBoard(BoardVO board) {
-		// TODO Auto-generated method stub
-		
+		boardMapper.insertBoard(board);
 	}
 
 	@Override

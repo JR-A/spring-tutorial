@@ -7,13 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class BoardVO {
 	//프로퍼티
-	private int board_num;		//게시판번호
+	private int board_num;		//게시판번호 시퀀스
 	private String title;		//제목
 	private String content; 	//내용
-	private int hit;			//조회수
-	private Date reg_date;		//등록일
-	private Date modify_date;	//수정일
-	private byte[] uploadFile;	//이미지 파일
+	private int hit;			//조회수	디폴트 0
+	private Date reg_date;		//등록일	디폴트 현재시간
+	private Date modify_date;	//수정일	디폴트 현재시간
+	private byte[] uploadfile;	//이미지 파일
 	private String filename;	//파일명
 	private String ip;			//ip주소
 	private int mem_num;		//회원번호
@@ -23,8 +23,8 @@ public class BoardVO {
 	/*========= 이미지 BLOB 처리 ===========*/
 	//setter
 	public void setUpload(MultipartFile upload) throws IOException{
-		//uploadFile세팅 (MultipartFile -> byte[])
-		setUploadFile(upload.getBytes());
+		//uploadfile세팅 (MultipartFile -> byte[]) : myBatis에서 DB에 BLOB타입으로 저장하기위해
+		setUploadfile(upload.getBytes());
 		
 		//filename세팅 (파일명)
 		setFilename(upload.getOriginalFilename());
@@ -55,8 +55,8 @@ public class BoardVO {
 		return modify_date;
 	}
 
-	public byte[] getUploadFile() {
-		return uploadFile;
+	public byte[] getUploadfile() {
+		return uploadfile;
 	}
 
 	public String getFilename() {
@@ -99,8 +99,8 @@ public class BoardVO {
 		this.modify_date = modify_date;
 	}
 
-	public void setUploadFile(byte[] uploadFile) {
-		this.uploadFile = uploadFile;
+	public void setUploadfile(byte[] uploadfile) {
+		this.uploadfile = uploadfile;
 	}
 
 	public void setFilename(String filename) {
@@ -119,7 +119,7 @@ public class BoardVO {
 		this.id = id;
 	}
 	
-	//byte[] uploadFile 제외하고 출력
+	//byte[] uploadfile 제외하고 출력
 	@Override
 	public String toString() {
 		return "BoardVO [board_num=" + board_num + ", title=" + title + ", content=" + content + ", hit=" + hit
