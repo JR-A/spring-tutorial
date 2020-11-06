@@ -1,5 +1,9 @@
 package kr.spring.board.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,11 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.spring.board.service.BoardService;
 import kr.spring.board.vo.BoardVO;
 import kr.spring.member.vo.MemberVO;
+import kr.spring.util.PagingUtil;
 
 @Controller
 public class BoardController {
@@ -35,12 +41,49 @@ public class BoardController {
 	
 	//게시판 목록
 	@RequestMapping("/board/list.do")
-	public ModelAndView process() {
+	public ModelAndView process(@RequestParam(value="pageNum", defaultValue="1") int currentPage, 
+								@RequestParam(value="keyfield", defaultValue="") String keyfield,
+								@RequestParam(value="keyword", defaultValue="") String keyword) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("keyfield", keyfield);
+		map.put("keyword", keyword);
+		
+		//총 게시글 수 (또는 검색된 게시글 수)
+		int count = boardService.selectRowCount(map);
+		
+		if(log.isDebugEnabled()) {
+			log.debug("<<count>> : " + count);
+		}
+		
+		//페이징처리
+		//PagingUtil(String keyfield, String keyword, int currentPage, int totalCount, int rowCount, int pageCount, String pageUrl)
+		PagingUtil page = new PagingUtil(keyfield, keyword, currentPage, count, 10, 10, "list.do");
+		
+		map.put("start", page.getStartCount());
+		map.put("end", page.getEndCount());
+		
+		if(log.isDebugEnabled()) {
+			log.debug("<<map>> : " + map);
+		}
+		
+		List<BoardVO> list = null;
+		if(count > 0) {
+			//게시글 목록
+			list = boardService.selectList(map);
+			
+			if(log.isDebugEnabled()) {
+				log.debug("<<글 목록>> : " + list);
+			}
+		}
 		
 		ModelAndView mav = new ModelAndView();
 		//뷰 이름 설정
 		mav.setViewName("boardList");	//definition name (member.xml에 저장된 모듈화된 페이지)
 		//데이터 저장
+		mav.addObject("count", count);
+		mav.addObject("list", list);
+		mav.addObject("pagingHtml", page.getPagingHtml());
 		
 		return mav;
 	}

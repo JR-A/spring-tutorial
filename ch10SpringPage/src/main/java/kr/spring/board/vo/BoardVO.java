@@ -18,7 +18,7 @@ public class BoardVO {
 	private String ip;			//ip주소
 	private int mem_num;		//회원번호
 	
-	private int id;				//회원아이디 - 컬럼에는 없지만 게시글 표시할때 자주 쓰이므로 프로퍼티에 추가
+	private String id;				//회원아이디 - 컬럼에는 없지만 게시글 표시할때 자주 쓰이므로 프로퍼티에 추가
 	
 	/*========= 이미지 BLOB 처리 ===========*/
 	//setter
@@ -71,8 +71,12 @@ public class BoardVO {
 		return mem_num;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public void setBoard_num(int board_num) {
@@ -115,9 +119,7 @@ public class BoardVO {
 		this.mem_num = mem_num;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 	
 	//byte[] uploadfile 제외하고 출력
 	@Override

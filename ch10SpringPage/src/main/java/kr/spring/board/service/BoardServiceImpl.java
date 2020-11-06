@@ -19,14 +19,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public List<BoardVO> selectList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardMapper.selectList(map);
 	}
 
 	@Override
 	public int selectRowCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+		return boardMapper.selectRowCount(map);
 	}
 
 	@Override
