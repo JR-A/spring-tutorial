@@ -40,7 +40,7 @@ public class BoardController {
 		return new BoardVO();
 	}
 	
-	//게시판 목록
+	//게시판 목록 (검색된 글 목록)
 	@RequestMapping("/board/list.do")
 	public ModelAndView process(@RequestParam(value="pageNum", defaultValue="1") int currentPage, 
 								@RequestParam(value="keyfield", defaultValue="") String keyfield,

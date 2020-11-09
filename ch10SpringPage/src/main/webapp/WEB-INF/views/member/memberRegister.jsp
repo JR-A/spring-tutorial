@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8" %>
 <%-- form 스프링 커스텀태그 사용 --%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%--jQuery 라이브러리 사용 --%>
+<%-- jQuery 라이브러리 사용 --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -19,9 +19,18 @@
 				return; 	//클릭 이벤트 함수 종료 위해 return  cf)submit이면 return false해야 submit안되게 할수있음
 			}
 			
-			//아이디가 4자이상 10자이하가 아닌경우
-			if($('#id').val().length<4 || $('#id').val().length>10){
+			//아이디가 4자이상 10자이하가 아닌경우 -> 정규표현식으로 변경함
+/* 			if($('#id').val().length<4 || $('#id').val().length>10){
 				$('#message_id').css('color', 'red').text('아이디는 4자이상 10자이하');
+				$('#id').focus();
+				return;
+			} */
+			
+			//정규표현식으로 클라이언트 사이드에서 체크
+			//var regMsg = new RexExp('^[A-Za-z0-9+]{4,10}$'); 객체를 생성하는 방법도 가능
+			var regMsg = /^[A-Za-z0-9+]{4,10}$/;
+			if(!regMsg.test($('#id').val())){	//정규표현식 만족하면 true
+				$('#message_id').css('color', 'red').text('아이디는 영문,숫자 4자이상 10자이하');
 				$('#id').focus();
 				return;
 			}
@@ -40,6 +49,7 @@
 				success: function(data){	//서버로부터 데이터가 성공적으로 도착하면 호출되는 함수
 											//data: ajax메소드가 서버로부터 전송받은 데이터(매개변수명이므로 변경가능)
 					$('#loading').hide();	//로딩이미지 숨김
+					
 						//.key로 value 접근
 					if(data.result == 'idNotFound'){			//아이디 미중복
 						$('#message_id').css('color', '#000').text('등록가능 ID');
@@ -90,7 +100,7 @@
 				<%-- 로딩gif --%>
 				<img id="loading" src="${pageContext.request.contextPath}/resources/images/ajax-loader.gif" width="16" height="16" style="display:none;">
 				<span id="message_id"></span> <%-- 아이디 중복체크 메세지 --%>
-				<form:errors path="id" cssClass="error-color"/> <%-- 아이디 유효성체크(입력여부) --%>
+				<form:errors path="id" cssClass="error-color"/> <%-- 아이디 유효성체크 오류메시지,서버단에서 하는 유효성체크(어노테이션방식,동적으로 메시지 출력됨) --%>
 			</li>
 			<li>
 				<label for="name">이름</label>

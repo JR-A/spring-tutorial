@@ -8,10 +8,10 @@
 		<ul class="search">
 			<li>
 				<select name="keyfield" id="keyfield">	<!-- 콤보박스(검색항목) -->
-					<option value="1">제목</option>
-					<option value="2">아이디</option>
-					<option value="3">내용</option>
-					<option value="4">전체</option>
+					<option value="title">제목</option>
+					<option value="id">아이디</option>
+					<option value="content">내용</option>
+					<option value="all">전체</option>
 				</select>
 			</li>
 			<li>

@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 <mapper namespace="kr.spring.board.dao.BoardMapper">   <!-- interface(BoardMapper.java) 전체 경로까지 모두 명시해야 자동매핑  -->
 
-	<!-- 글 목록 -->	<!-- id를 BoardMapper.java의 메서드명과 일치시켜야 자동매핑 -->
+	<!-- 동적 SQL! 전체 글 목록 or (검색조건이 있으면 )검색된 글 목록 --> <!-- id를 BoardMapper.java의 메서드명과 일치시켜야 자동매핑 -->
 	<!-- List<BoardVO>로 반환받지만, List로 명시하지않고 List에 담기는 자바빈타입으로 명시(root-context.xml에서 알리아스 지정했으므로 클래스명 앞글자 소문자로 변환한 boardVO로 명시) -->
 	<select id="selectList" parameterType="map" resultType="boardVO"> 
 		SELECT
@@ -16,6 +16,22 @@
 			  		 *
 			  		FROM spboard b JOIN spmember m
 			  		ON b.mem_num=m.mem_num
+			  		<where>
+						<if test="keyword != '' and keyfield == 'title'">
+							b.title LIKE '%' || #{keyword} || '%'
+						</if>
+						<if test="keyword != '' and keyfield == 'id'">
+							m.id LIKE '%' || #{keyword} || '%'
+						</if>
+						<if test="keyword != '' and keyfield == 'content'">
+							b.content LIKE '%' || #{keyword} || '%'
+						</if>
+						<if test="keyword != '' and keyfield == 'all'">
+							b.title LIKE '%' || #{keyword} || '%' or
+							m.id LIKE '%' || #{keyword} || '%' or
+							b.content LIKE '%' || #{keyword} || '%'
+						</if>
+					</where>
 			  		ORDER BY b.board_num DESC) a)
 		<![CDATA[
 		WHERE rnum >= #{start} AND rnum <= #{end}
@@ -23,13 +39,30 @@
 	</select>
 	<!-- xml에서는 비교연산자 <, > 쓰게되면 태그 시작, 끝으로 인식하기때문에 문법체크에서 배제하도록 설정해야함 (CDATA섹션으로 묶음) -->
  	
- 	<!-- 총 레코드(게시물) 수 -->
+ 	<!-- 동적 SQL! 총 레코드(게시물) 수 or (검색조건이 있으면)검색된 게시글 수 -->
 	<select id="selectRowCount" parameterType="map" resultType="integer">
 		SELECT
 			COUNT(*)
 		FROM spboard b JOIN spmember m
 		ON b.mem_num = m.mem_num
+		<where>
+			<if test="keyword != '' and keyfield == 'title'">
+				b.title LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != '' and keyfield == 'id'">
+				m.id LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != '' and keyfield == 'content'">
+				b.content LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="keyword != '' and keyfield == 'all'">
+				b.title LIKE '%' || #{keyword} || '%' or
+				m.id LIKE '%' || #{keyword} || '%' or
+				b.content LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
 	</select>
+	<!-- ||는 sql 연결연산자 -->
 	
 	
 	<!-- 동적 SQL! 파일이 있는경우와 없는 경우. 파일이 있는 경우 부분 SQL 만들어냄 -->
@@ -47,5 +80,5 @@
 		WHERE board_num=#{board_num}
 	</update>
 	<!-- form에서 upload 전송될 때 파일을 올리지 않더라도 파일 객체는 생성되므로 setter동작하여 filename이 null이 아닌 빈문자열로 전송됨 -->
-		
+	
 </mapper>

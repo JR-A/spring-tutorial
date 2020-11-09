@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,9 @@ public class MemberVO {
 	//프로퍼티
 	//spmember 테이블 컬럼
 	private int mem_num;
-	@Size(min=4,max=10)
+	//정규표현식을 이용하여 유효성 체크
+	//^:시작, $:끝, A-Za-z0-9:영문자/숫자, +:한문자 이상반복, {4,10}:4회부터 10회 반복(4자이상 10자이하)
+	@Pattern(regexp="^[A-Za-z0-9+]{4,10}$")
 	private String id;
 	private int auth;	/*0:탈퇴회원, 1:정지회원, 2:일반회원, 3:관리자*/ //default값 : 2
 	//spmember_detail 테이블 컬럼
